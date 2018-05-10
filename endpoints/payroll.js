@@ -1,4 +1,3 @@
-
 var express = require('express');
 var router = express.Router(); 
 
@@ -13,6 +12,15 @@ router.post('/payroll_get',function(req,res){
 	})
 });
 
+router.post('/payroll_get_user_id',function(req,res){
+	db.models.Payroll.find({user_id:req.body.user_id,month:req.body.month,session:req.body.session}).then((payroll)=>{
+		res.json(payroll);
+	}).catch((err)=>{
+		console.log(err);
+		throw err = new Error('Error while fetching user payroll with this user id');
+	})
+})
+
 router.post('/payroll_get_all',function(req,res){
 	db.models.Payroll.find().then((payrolls)=>{
 		console.log(payrolls);
@@ -26,45 +34,53 @@ router.post('/payroll_get_all',function(req,res){
 
 
 router.post('/payroll',function(req,res){
-	var payroll = new db.models.Payroll({
+	db.models.Payroll.findOne({user_id:req.body.user_id,month:req.body.month,session:req.body.session}).then((payroll)=>{
+      if(payroll){
+      	payroll.basic_sal =  req.body.basic_sal,
+		payroll.allowances = req.body.allowances,
+		payroll.deductions = req.body.deductions,
+		payroll.month = req.body.month,
+		payroll.status = req.body.status,
+		payroll.session = req.body.session
+	   payroll.save().then((payrollSaved)=>{
+	   	 res.json(payrollSaved);
+	   }).catch((err)=>{
+	   	  console.log(err);
+	   	  throw err = new Error('Error while editing payroll');
+	   })
+      }
 
-		user_id: req.body.user_id,
-		basic_sal: req.body.basic_sal,
-		allowances: req.body.allowances,
-		deductions: req.body.deductions,
-		month: req.body.month,
-		status: req.body.status,
-		session: req.body.session
-	});
+     else{
 
-	payroll.save().then((newpayroll)=>{
-		res.json(newpayroll);
-		console.log(newpayroll);
+	    var payroll = new db.models.Payroll({
+
+			user_id: req.body.user_id,
+			basic_sal: req.body.basic_sal,
+			allowances: req.body.allowances,
+			deductions: req.body.deductions,
+			month: req.body.month,
+			status: req.body.status,
+			session: req.body.session
+		});
+
+		payroll.save().then((newpayroll)=>{
+			res.json(newpayroll);
+			console.log(newpayroll);
+		}).catch((err)=>{
+			console.log(err);
+			throw err = new Error('Error occured while putting payroll');
+
+		});
+
+      	
+     }
+
+
 	}).catch((err)=>{
 		console.log(err);
-		throw err = new Error('Error occured');
-
-	});
-
-});
-
-
-router.post('/payroll_edit',function(req,res){
-	db.models.Payroll.find({_id:req.body._id}).then((payrollEdited)=>{
-       payrollEdited = {
-		
-		title: req.body.title,
-		description: req.body.description,
-		date: req.body.date,
-		status: req.body.status,
-		session: req.body.session
-	}
-	}).catch((err)=>{
-		console.log(err);
-
-		throw err = new Error('Error while editing');
-
-	});
+		throw err = new Error('Error while fetching payroll');
+	})
+	
 });
 
 module.exports = router;

@@ -1,6 +1,16 @@
 var express = require('express');
 var router = express.Router(); 
 
+router.post('/teacher_get_erp_id', function(){
+  db.models.Teacher.findOne({ erp_id: req.body.erp_id, session:req.body.session })
+     .then((teacher)=>{
+       res.json(teacher);
+     }).catch((err)=>{
+       console.log(err);
+       res.json('some error occured while fetching erp id');
+     })
+})
+
 router.post('/teacher_get',function(req,res){
 	
 	db.models.Teacher.findOne({_id: req.body._id}).then((teacher)=>{
