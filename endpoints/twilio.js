@@ -7,7 +7,8 @@ router.post('/configure_twilio',function(req,res){
 	
 	var twilio_data = new db.models.Twilio({
           account_sid: req.body.account_sid,
-          auth_token: req.body.auth_token
+          auth_token: req.body.auth_token,
+          contact : req.body.contact
       });
 
 	twilio_data.save().then((twilio_data)=>{
@@ -21,12 +22,12 @@ router.post('/configure_twilio',function(req,res){
 
 
 router.post('/edit_twilio',function(req,res){
-    db.models.findOne({_id: req.body._id}).then((twilio_data)=>{
-    	twilio_data = {
-    		account_sid: req.body.account_sid,
-    		auth_token: req.body.auth_token,
-    		contact: req.body.contact
-    	}
+    db.models.Twilio.findOne({_id: req.body._id}).then((twilio_data)=>{
+    	
+    		twilio_data.account_sid = req.body.account_sid;
+    		twilio_data.auth_token = req.body.auth_token;
+    		twilio_data.contact = req.body.contact;
+    	
 
     	twilio_data.save().then((twilio_data)=>{
     		res.json(twilio_data);

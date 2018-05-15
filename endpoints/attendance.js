@@ -13,7 +13,7 @@ router.post('/attendance_student_class',function(req,res){
 })
 
 router.post('/attendance_student_day',function(req,res){
-	db.models.Attendance_Student.findOne({_id:req.body._id}).populate('students.student', 'name erp_id parent_contact').then((student_attendance)=>{
+	db.models.Attendance_Student.findOne({_id:req.body._id,session:req.body.session}).populate('students.student', 'name erp_id parent_contact').then((student_attendance)=>{
 		res.json(student_attendance);
 		console.log(student_attendance);
 	}).catch((err)=>{
@@ -33,7 +33,7 @@ router.post('/attendance_student_get_for_class_ref',function(req,res){
 })
 
 router.post('/attendance_teacher_day',function(req,res){
-	db.models.Attendance_Accountant.findOne({_id: req.body.id}).then((teacher_attendance)=>{
+	db.models.Attendance_Accountant.findOne({_id: req.body.id,session:req.body.session}).then((teacher_attendance)=>{
 		res.json(teacher_attendance);
 		console.log(teacher_attendance);
 	})
@@ -50,7 +50,7 @@ router.post('/attendance_teacher_all',function(req,res){
 })
 
 router.post('/attendance_accountant_day',function(req,res){
-	db.models.Attendance_Accountant.findOne({_id: req.body.id}).then((accountant_attendance)=>{
+	db.models.Attendance_Accountant.findOne({_id: req.body.id,session:req.body.session}).then((accountant_attendance)=>{
 		res.json(accountant_attendance);
 		console.log(accountant_attendance);
 	}).catch((err)=>{
@@ -71,7 +71,7 @@ router.post('/attendance_accountant_all',function(req,res){
 
 
 router.post('/attendance_librarian_day',function(req,res){
-	db.models.Attendance_Librarian.find({_id: req.body.id}).then((librarian_attendance)=>{
+	db.models.Attendance_Librarian.find({_id: req.body.id,session:req.body.session}).then((librarian_attendance)=>{
 		res.json(librarian_attendance);
 		console.log(librarian_attendance);
 	}).catch((err)=>{
@@ -317,7 +317,7 @@ router.post('/attendance_other',function(req,res){
 
 
 router.post('/attendance_other_day',function(req,res){
-	db.models.Attendance_Other.find({_id: req.body.id}).populate().then((other_attendance)=>{
+	db.models.Attendance_Other.find({_id: req.body.id,session:req.body.session}).populate().then((other_attendance)=>{
 		res.json(other_attendance);
 		console.log(other_attendance);
 	}).catch((err)=>{

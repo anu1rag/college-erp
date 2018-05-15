@@ -1,78 +1,54 @@
 var express = require('express');
 var router = express.Router(); 
 
-router.post('/student_get',function(req,res){
+router.post('/other_get',function(req,res){
 	
-	db.models.Student.findOne({_id: req.body._id}).then((students)=>{
-		console.log(students);
-		res.json(students);
+	db.models.OtherStaff.findOne({_id: req.body._id,session:req.body.session}).then((otherstaff)=>{
+		console.log(otherstaff);
+		res.json(otherstaff);
 	}).catch((err)=>{
 		console.log(err);
 		res.json("some error occured")
 	})
 });
 
-router.post('/student_get_for_erp_id',function(req,res){
-   if (!req.body.erp_id || !req.body.session){
-    res.json('Please enter erpid and session');
-   }
-   else{
-    db.models.Student.findOne({erp_id:req.body.erp_id,session:req.body.session}).then((student)=>{
-     if(!student){
-      res.json('Invalid erp_id');
-     }
-     else{
-       res.json(student);
-     }
-   
-  }).catch((err)=>{
-    console.log(err);
-    throw err = new Error('Error while fetching student erp id');
-    console.log('Some kind of error occured....')
-  })
-}
-})
-
-router.post('/students_get_for_class_ref',function(req,res){
-  console.log(count++);
-	db.models.Student.find({class_ref:req.body.class_ref,session:req.body.session}).then((student)=>{
-		res.json(student);
+router.post('/other_get_all',function(req,res){
+	db.models.OtherStaff.find({session:req.body.session}).then((otherstaffs)=>{
+		res.json(otherstaffs);
 	}).catch((err)=>{
 		console.log('Some kind of error occured....')
 	})
 });
-//authenticated(['ADMIN'])
-router.post('/student',function(req,res,next){
 
-    console.log("idhar aya");
+router.post('/other',function(req,res,next){
+
+
  db.models.User.findOne({username:req.body.username}).then((user)=>{
   if(user){
-     db.models.Student.findOne({user_id:user._id}).then((student)=>{
-      if(student){
+     db.models.OtherStaff.findOne({user_id:user._id}).then((otherstaff)=>{
+      if(otherstaff){
     
-      student.name = req.body.name;
-      student.student_contact=  req.body.student_contact;
-      student.parent_contact =  req.body.parent_contact;
-      student.gender =  req.body.gender;
-      student.address = req.body.address;
-      student.birthday = req.body.birthday;
-      student.email = req.body.email;
-      student.class_ref =  req.body.class_ref;
-      student.dormitory = req.body.dormitory;
-      student.transport = req.body.transport;
-      student.date_of_join = req.body.date_of_join;
-      student.aadhar_num = req.body.aadhar_num;
-      student.account_name = req.body.account_name;
-      student.account_number = req.body.account_number;
-      student.ifsc = req.body.ifsc;
-      student.caste = req.body.caste;
-      student.session = req.body.session;
-      student.save().then((editedStudent)=>{
-      res.json(editedStudent);
+      otherstaff.name = req.body.name;
+      otherstaff.phone=  req.body.phone;
+      otherstaff.gender =  req.body.gender;
+      otherstaff.address = req.body.address;
+      otherstaff.birthday = req.body.birthday;
+      otherstaff.email = req.body.email;
+      otherstaff.dormitory = req.body.dormitory;
+      otherstaff.transport = req.body.transport;
+      otherstaff.date_of_join = req.body.date_of_join;
+      otherstaff.aadhar_num = req.body.aadhar_num;
+      otherstaff.account_name = req.body.account_name;
+      otherstaff.account_number = req.body.account_number;
+      otherstaff.ifsc = req.body.ifsc;
+      otherstaff.caste = req.body.caste;
+      otherstaff.session = req.body.session;
+      otherstaff.save().then((editedotherstaff)=>{
+      res.json(editedotherstaff);
 
     }).catch((err)=>{
       console.log(err);
-      throw (err) = new Error('Error while editing student'); 
+      throw (err) = new Error('Error while editing otherstaff'); 
     })
   }
 
@@ -88,32 +64,30 @@ else{
   var user =  new db.models.User({
     username: req.body.username,
     password: req.body.password,
-    type: 'STUDENT'
+    type: 'OTHER'
 
   });
 
   user.save()
-  .then((student)=>{
-    console.log(student);
+  .then((otherstaff)=>{
+    console.log(otherstaff);
 
 
  db.models.Count.findOne({session:req.body.session}).then((counter)=>{
     console.log(Boolean(counter))
     if(counter){
       var stringCounter = counter.count.toString().length;
-      var erp_id = 'ST' + '0'.repeat(counter.str.length - stringCounter) + (++counter.count);
+      var erp_id = 'OS' + '0'.repeat(counter.str.length - stringCounter) + (++counter.count);
       console.log("erp",erp_id);
-      var newStudent = new db.models.Student({
-      user_id: student._id,
+      var newotherstaff = new db.models.OtherStaff({
+      user_id: otherstaff._id,
       name: req.body.name,
       erp_id: erp_id,
-      student_contact: req.body.student_contact,
-      parent_contact: req.body.parent_contact,
+      phone: req.body.phone,
       gender: req.body.gender,
       address: req.body.address,
       birthday: req.body.birthday,
       email: req.body.email,
-      class_ref: req.body.class_ref,
       dormitory: req.body.dormitory,
       transport: req.body.transport,
       date_of_join: req.body.date_of_join,
@@ -124,10 +98,10 @@ else{
       caste: req.body.caste,
       session: req.body.session
     });
-    newStudent.save()
-    .then((newStudent)=>{
-      console.log(newStudent);
-      res.json(newStudent);
+    newotherstaff.save()
+    .then((newotherstaff)=>{
+      console.log(newotherstaff);
+      res.json(newotherstaff);
       counter.save().then((counter)=>{
           console.log('updated counter',counter)
         }).catch((err)=>{
@@ -135,7 +109,7 @@ else{
            console.log('Err while updating counter');
         })
     }).catch((err)=>{
-      res.json('Error while saving new student');
+      res.json('Error while saving new otherstaff');
       console.log(err);
     })
 
@@ -149,18 +123,16 @@ else{
       counter.save().then((counter)=>{
         console.log(counter);
         var stringCounter = counter.count.toString().length
-        var erp_id = 'ST' + '0'.repeat(counter.str.length - stringCounter) + (++counter.count);
-        var newStudent = new db.models.Student({
-        user_id: student._id,
+        var erp_id = 'OS' + '0'.repeat(counter.str.length - stringCounter) + (++counter.count);
+        var newotherstaff = new db.models.OtherStaff({
+        user_id: otherstaff._id,
         name: req.body.name,
         erp_id: erp_id,
-        student_contact: req.body.student_contact,
-        parent_contact: req.body.parent_contact,
+        phone: req.body.phone,
         gender: req.body.gender,
         address: req.body.address,
         birthday: req.body.birthday,
         email: req.body.email,
-        class_ref: req.body.class_ref,
         dormitory: req.body.dormitory,
         transport: req.body.transport,
         date_of_join: req.body.date_of_join,
@@ -171,10 +143,10 @@ else{
         caste: req.body.caste,
         session: req.body.session
       });
-      newStudent.save()
-      .then((newStudent)=>{
-         res.json(newStudent);
-        console.log(newStudent);
+      newotherstaff.save()
+      .then((newotherstaff)=>{
+         res.json(newotherstaff);
+        console.log(newotherstaff);
 
 
         counter.save().then((counter)=>{
@@ -185,7 +157,7 @@ else{
         })
         
       }).catch((err)=>{
-        res.json('Error while saving new student');
+        res.json('Error while saving new otherstaff');
         console.log(err);
       })
        
@@ -210,7 +182,7 @@ else{
 
  }).catch((err)=>{
   console.log(err);
-  throw err= new Error('Error while searching student');
+  throw err= new Error('Error while searching otherstaff');
  })
  
 

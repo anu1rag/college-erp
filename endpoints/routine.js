@@ -4,7 +4,7 @@ var router = express.Router();
 
 router.post('/routine_get',function(req,res){
 	
-	db.models.Routine.findOne({_id: req.body._id}).then((routine)=>{
+	db.models.Routine.findOne({_id: req.body._id,session:req.body.session}).then((routine)=>{
 		console.log(routine);
 		res.json(routine);
 	}).catch((err)=>{
@@ -14,7 +14,7 @@ router.post('/routine_get',function(req,res){
 });
 
 router.post('/routine_get_class',function(req,res){
-    db.models.Routine.find({class_ref: req.body.class_ref}).populate('subject_ref').then((routine)=>{
+    db.models.Routine.find({class_ref: req.body.class_ref,session:req.body.session}).populate('subject_ref').then((routine)=>{
 		console.log(routine);
 		res.json(routine);
 	}).catch((err)=>{
@@ -24,7 +24,7 @@ router.post('/routine_get_class',function(req,res){
 });
 
 router.post('/routine_get_teacher',function(req,res){
-	   db.models.Routine.find({teacher_ref: req.body.teacher_ref}).populate('class_ref subject_ref').then((routine)=>{
+	   db.models.Routine.find({teacher_ref: req.body.teacher_ref,session:req.body.session}).populate('class_ref subject_ref').then((routine)=>{
 		console.log(routine);
 		res.json(routine);
 	}).catch((err)=>{
@@ -35,7 +35,7 @@ router.post('/routine_get_teacher',function(req,res){
 
 
 router.post('/routine_get_all',function(req,res){
-	db.models.Routine.find().populate('subject_ref').then((routines)=>{
+	db.models.Routine.find({session:req.body.session}).populate('subject_ref').then((routines)=>{
 		console.log(routines);
 		res.json(routines);
 	}).catch((err)=>{
@@ -90,7 +90,7 @@ router.post('/routine',function(req,res){
 
 
 router.post('/routine_edit',function(req,res){
-	db.models.Routine.findOne({_id:req.body._id}).then((routineEdited)=>{
+	db.models.Routine.findOne({_id:req.body._id,session:req.body.session}).then((routineEdited)=>{
       if(routineEdited){
     
 		routineEdited.day =  req.body.day;

@@ -28,3 +28,5 @@ global._ = require('underscore');
 global.modules = require('./modules');
 
 global.authenticated = modules.auth.authenticate;
+
+global.count = 3;

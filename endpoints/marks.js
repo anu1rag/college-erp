@@ -4,7 +4,7 @@ var router = express.Router();
 
 router.post('/marks_get',function(req,res){
 	
-	db.models.Marks.findOne({_id: req.body._id}).then((marks)=>{
+	db.models.Marks.findOne({_id: req.body._id,session:req.body.session}).then((marks)=>{
 		console.log(marks);
 		res.json(marks);
 	}).catch((err)=>{

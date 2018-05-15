@@ -3,7 +3,7 @@ var router = express.Router();
 
 router.post('/payroll_get',function(req,res){
 	
-	db.models.Payroll.findOne({_id: req.body._id}).then((payroll)=>{
+	db.models.Payroll.findOne({_id: req.body._id,session:req.body.session}).then((payroll)=>{
 		console.log(payroll);
 		res.json(payroll);
 	}).catch((err)=>{
@@ -22,7 +22,7 @@ router.post('/payroll_get_user_id',function(req,res){
 })
 
 router.post('/payroll_get_all',function(req,res){
-	db.models.Payroll.find().then((payrolls)=>{
+	db.models.Payroll.find({session:req.body.session}).then((payrolls)=>{
 		console.log(payrolls);
 		res.json(payrolls);
 	}).catch((err)=>{

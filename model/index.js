@@ -19,7 +19,6 @@ module.exports.models = {
 	Notice: require('./data').Notice,
 	Payroll: require('./data').Payroll,
 	Expense: require('./data').Expense,
-	Message_Detail: require('./data').Message_Detail,
 	Message: require('./data').Message,
 	Marks: require('./data').Marks,
 	Exam: require('./data').Exam,
@@ -30,7 +29,8 @@ module.exports.models = {
 	Attendance_Librarian: require('./data').Librarian_Attendance,
 	Attendance_Other: require('./data').Other_Attendance,
 	Twilio: require('./data').Twilio,
-	Nodemailer: require('./data').Nodemailer
+	Nodemailer: require('./data').Nodemailer,
+	Count: require('./data').Count
 
 }
 

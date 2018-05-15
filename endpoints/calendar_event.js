@@ -3,7 +3,7 @@ var router = express.Router();
 
 router.post('/calendar_get_one',function(req,res){
 	
-	db.models.Calendar.findOne({date:req.body.date}).then((calendar)=>{
+	db.models.Calendar.findOne({date:req.body.date,session:req.body.session}).then((calendar)=>{
 		console.log(calendar);
 		res.json(calendar);
 	}).catch((err)=>{
@@ -13,7 +13,7 @@ router.post('/calendar_get_one',function(req,res){
 });
 
 router.post('/calendar_get_all',function(req,res){
-	db.models.Calendar.find().then((calendars)=>{
+	db.models.Calendar.find({session:req.body.session}).then((calendars)=>{
 		console.log(calendars);
 		res.json(calendars);
 	}).catch((err)=>{
@@ -46,7 +46,7 @@ router.post('/calendar',function(req,res){
 
 
 router.post('/calendar_edit',function(req,res){
-	db.models.Calendar.find({_id:req.body._id}).then((calendarEdited)=>{
+	db.models.Calendar.find({_id:req.body._id,session:req.body.session}).then((calendarEdited)=>{
        calendarEdited = ({
 		date: req.body.date,
 		description: req.body.description,

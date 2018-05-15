@@ -6,7 +6,7 @@ var router = express.Router();
 var twilio = require('twilio');
 
 router.post('/message_detail_get',function(req,res){
-    db.models.Message_Detail.findOne({_id: req.body._id}).then((message)=>{
+    db.models.Message.find({date:req.body.date,session:req.body.session}).then((message)=>{
        res.json(message_detail);
        console.log(message_detail);
     })
@@ -14,7 +14,7 @@ router.post('/message_detail_get',function(req,res){
 
 
 router.post('/message_get_all',function(req,res){
-    db.models.Message_Detail.find().then((message)=>{
+    db.models.Message.find({session:req.body.session}).then((message)=>{
        res.json(message_detail);
        console.log(message_detail);
     }).catch((err)=>{
@@ -23,15 +23,16 @@ router.post('/message_get_all',function(req,res){
     })
 });
 
-router.post('/message_create',function(req,res){
-	var message = new db.models.Message({
+router.post('/message',function(req,res){
 
-		time_sent:req.body.time_sent,
-		time_seen:req.body.time_seen,
-		from:req.body.from,
-		to:req.body.to,
-		message:req.body.message,
-		status:req.body.status
+	var message = new db.models.Message({
+    
+     body: req.body.messagebody,
+     to: req.body.to,
+     date: req.body.date,
+     time: req.body.time,
+		 current_session:req.body.session
+
 	});
 
 	message.save().then((message)=>{
@@ -45,7 +46,7 @@ router.post('/message_create',function(req,res){
 
 
 router.post('/message_get_detail_user',function(req,res){
-       db.models.Message.findOne({_id:req.body._id}).then((message)=>{
+       db.models.Message.findOne({_id:req.body._id,session:req.body.session}).then((message)=>{
           res.json(message);
           console.log(message);        
        }).catch((err)=>{
@@ -54,17 +55,6 @@ router.post('/message_get_detail_user',function(req,res){
        })
 });
 
-
-// router.post('/message_post_detail_user_received',function(req,res){
-// 	db.models.Message.find({user_id:req.body.user_id}).then((message)=>{
-// 		if(message.length == 0){
-//            var message = new db.models.Message({
-//            	    user_id: req.body.user_id,
-//            	    inbox: req.body.
-//            })
-// 		}
-// 	})
-// });
 
 module.exports = router;
 

@@ -77,7 +77,7 @@ var teacher = new Schema({
 		required: true
 	},
 
-	aadhaar_num: {
+	aadhar_num: {
 		type: String
 	},
 
@@ -181,7 +181,7 @@ var student = new Schema({
 		required: true
 	},
 
-	aadhaar_num: {
+	aadhar_num: {
 		type: String
 	},
 
@@ -217,6 +217,28 @@ var student = new Schema({
    	   type: String,
    	   required: true
    }
+});
+
+//tr = 'ST'+ repeatChar(x.length-z.toString().length,'0') + (z++)
+//
+var count = new Schema({
+	
+	count: {
+		type: Number,
+	    required: true,
+	    default: 0
+     },
+
+    str: {
+    	type: String,
+    	required: true,
+    	default: '00000001' 
+    },
+    session:{
+    	type: String,
+    	required: true
+    }
+
 });
 
 var otherstaff = new Schema({
@@ -268,7 +290,7 @@ var otherstaff = new Schema({
 		required: true
 	},
 
-	aadhaar_num: {
+	aadhar_num: {
 		type: String
 	},
 
@@ -358,7 +380,7 @@ var librarian = new Schema({
 		required: true
 	},
 
-	aadhaar_num: {
+	aadhar_num: {
 		type: String
 	},
 
@@ -401,6 +423,7 @@ var librarian = new Schema({
 
 
 var accountant = new Schema({
+	
 	user_id: {
 		type: Schema.Types.ObjectId,
 		required: true,
@@ -431,6 +454,11 @@ var accountant = new Schema({
 		type: String,
 		required: true
 	},
+
+	email:{
+		type: String,
+		required: true
+	},
 	
 	gender: {
 		type: String,
@@ -438,12 +466,51 @@ var accountant = new Schema({
 		enum: ['Male','Female','Other']
 	},
 
+	date_of_join: {
+		type: String,
+		required: true
+	},
+
+	aadhar_num: {
+		type: String
+	},
+
+	bus_num: {
+		type: Schema.Types.ObjectId,
+		ref: 'Transport'
+
+	},
+
+	dormitory: {
+		type: Schema.Types.ObjectId,
+		ref: 'Dormitory'
+	},
+
+	account_name: {
+		type: String
+	},
+
+	account_number: {
+		type:  Number
+	},
+
+	ifsc: {
+		type:  String
+	},
+
+	caste: {
+		type:  String,
+		required: true
+	},
+
 	session: {
    	   type: String,
    	   required: true
    }
 
-});
+
+	   
+}); 
 
 var newclass = new Schema({
 	name: {
@@ -845,11 +912,6 @@ var transport = new Schema({
     	required: true
     },
     
-    erp_id: {
-    	type: String,
-    	required: true
-    },
-
     fare: {
    	   type: Number,
    	   required: true
@@ -946,10 +1008,6 @@ var system = new Schema({
     	type: String,
     	required: true
     },
-    currency: {
-    	type: String,
-    	required: true
-    },
     sessions: {
     	type: Array,
     	required: true
@@ -1022,58 +1080,36 @@ var expense = new Schema({
 
 });
 
-var message_detail = new Schema({
-
-	time_sent: {
-		type: String
-	},
-
-	time_seen: {
-		type: String
-	},
-
-	from: {
-		type: String
+var message = new Schema({
+	
+	body: {
+		type: String,
+		required: true
 	},
 
 	to: {
-		type: String
+		type:Array,
+		required:true
 	},
 
-	message: {
-        type: String
+	date: {
+		type: String,
+		required: true
 	},
 
-	status: {
-		type: String
-		//socket.io real_time
-
-		//ye kyaa likha hu main.....
+	time: {
+		type: String,
+		required: true
 	},
 
+	current_session:{
+		type: String,
+		required: true
+	}
 
 
-});
+})
 
-var message = new Schema({
-  
-  user_id: {
-  	type: Schema.Types.ObjectId,
-  	ref: 'User',
-  	required: true
-  },
-
-  inbox: [{
-  	type: String,
-  	ref: 'Message_Detail'
-  }],
-
-  sent:[{
-  	type: String,
-  	ref: 'Message_Detail'
-  }]
-
-});
 
 var twilio = new Schema({
 	account_sid: {
@@ -1116,29 +1152,7 @@ var nodemailer = new Schema({
 
 
 user.pre('save', function(next){
-		
-	  // pass = this.password;
-   //    bcrypt.genSalt(10, function(err, salt){
-
-   //    if(err){
-   //    	console.log(err); 
-   //    	throw err= new Error('Cant generate salt');
-   //    }
-   //    else{
-   //    console.log("salt",salt);
-   //    console.log("password",pass);
-   //    bcrypt.hash(pass, salt, function(err, hash){
-   //     if(err){
-   //    	console.log(err); 
-   //    	throw err= new Error('Cant Hash');
-   //    }
-   //     else{
-   //      pass = hash
-   //      next()
-   //     }
-   //    })
-   //   }
-   //  })                                                                                                                                     
+		                                                                                                                               
     if(this.password) {                                                                                                                                                        
         var salt = bcrypt.genSaltSync(10)                                                                                                                                     
         this.password  = bcrypt.hashSync(this.password, salt)                                                                                                                
@@ -1150,6 +1164,7 @@ user.pre('save', function(next){
 
 
 module.exports = {
+
 	User: mongoose.model('User',user),
 	Teacher: mongoose.model('Teacher',teacher),
 	Student: mongoose.model('Student',student),
@@ -1166,7 +1181,6 @@ module.exports = {
 	Notice: mongoose.model('Notice',notice),
 	Payroll: mongoose.model('Payroll',payroll),
 	Expense: mongoose.model('Expense',expense),
-	Message_Detail: mongoose.model('Message_Detail',message_detail),
 	Message: mongoose.model('Message',message),
 	Marks: mongoose.model('Marks',marks),
 	Exam: mongoose.model('Exams',exam),
@@ -1177,5 +1191,6 @@ module.exports = {
 	Librarian_Attendance: mongoose.model('Librarian_Attendance',librarian_attendance),
 	Other_Attendance: mongoose.model('Other_Attendance',other_attendance),
 	Twilio : mongoose.model('Twilio',twilio),
-	Nodemailer: mongoose.model('Nodemailer',nodemailer)
+	Nodemailer: mongoose.model('Nodemailer',nodemailer),
+	Count: mongoose.model('Count', count)
 }

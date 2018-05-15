@@ -13,7 +13,7 @@ router.post('/transport_get',function(req,res){
 });
 
 router.post('/transport_get_all',function(req,res){
-	db.models.Transport.find().then((vehicles)=>{
+	db.models.Transport.find({session:req.body.session}).then((vehicles)=>{
 		console.log(vehicles);
 		res.json(vehicles);
 	}).catch((err)=>{
@@ -25,12 +25,11 @@ router.post('/transport_get_all',function(req,res){
 
 
 router.post('/transport',function(req,res){
-	db.models.Transport.findOne({name:req.body.name}).then((transport)=>{
+	db.models.Transport.findOne({name:req.body.name,session:req.body.session}).then((transport)=>{
 		if(!transport){
 			var transport = new db.models.Transport({
             name: req.body.name,
             vehicle_num: req.body.vehicle_num,
-            erp_id: req.body.erp_id,
             fare: req.body.fare,
    		    session: req.body.session
 
@@ -60,7 +59,6 @@ router.post('/transport_edit',function(req,res){
       if(transportEdited){
     
 		transportEdited.name =  req.body.name;
-		transportEdited.erp_id =  req.body.erp_id;
 		transportEdited.vehicle_num =  req.body.vehicle_num;
 		transportEdited.fare =  req.body.fare;
 		transportEdited.session = req.body.session;

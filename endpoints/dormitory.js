@@ -31,7 +31,6 @@ router.post('/dormitory',function(req,res){
             name: req.body.name,
             room_num: req.body.room_num,
             room_type: req.body.room_type,
-            erp_id: req.body.erp_id,
             fare: req.body.fare,
    		    session: req.body.session
 
@@ -61,7 +60,6 @@ router.post('/dormitory_edit',function(req,res){
       if(dormitoryEdited){
     
 		dormitoryEdited.name =  req.body.name;
-		dormitoryEdited.erp_id =  req.body.erp_id;
 		dormitoryEdited.room_num =  req.body.room_num;
 		dormitoryEdited.room_type = req.body.room_type;
 		dormitoryEdited.fare =  req.body.fare;

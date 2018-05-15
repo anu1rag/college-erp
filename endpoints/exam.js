@@ -3,7 +3,7 @@ var router = express.Router();
 
 router.post('/exam_get',function(req,res){
 	
-	db.models.Exam.findOne({_id: req.body._id}).then((exam)=>{
+	db.models.Exam.findOne({_id: req.body._id,session:req.body.session}).then((exam)=>{
 		console.log(exam);
 		res.json(exam);
 	}).catch((err)=>{
@@ -24,7 +24,7 @@ router.post('/exam_get_class',function(req,res){
 })
 
 router.post('/exam_get_all',function(req,res){
-	db.models.Exam.find().then((exams)=>{
+	db.models.Exam.find({session:req.body.session}).then((exams)=>{
 		console.log(exams);
 		res.json(exams);
 	}).catch((err)=>{
@@ -35,7 +35,7 @@ router.post('/exam_get_all',function(req,res){
 
 
 router.post('/exam',function(req,res){
-	db.models.Exam.findOne({name:req.body.name}).then((exam)=>{
+	db.models.Exam.findOne({name:req.body.name,session:req.body.session}).then((exam)=>{
 		if(!exam){
 			var exam = new db.models.Exam({
             name: req.body.name,
@@ -68,7 +68,7 @@ router.post('/exam',function(req,res){
 
 
 router.post('/exam_edit',function(req,res){
-	db.models.Exam.findOne({_id:req.body._id}).then((examEdited)=>{
+	db.models.Exam.findOne({_id:req.body._id,session:req.body.session}).then((examEdited)=>{
       if(examEdited){
     
 		examEdited.name =  req.body.name;
