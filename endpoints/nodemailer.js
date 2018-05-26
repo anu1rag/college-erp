@@ -3,7 +3,7 @@ var express = require('express');
 var router = express.Router();
 var nodemailer = require('nodemailer');
 
-router.post('/configure_nodemailer',function(req,res){
+router.post('/configure_nodemailer',authenticated(['ADMIN']),function(req,res){
   var nodemailer_data = new db.models.Nodemailer({
   	   mail: req.body.mail,
   	   client_id: req.body.client_id,
@@ -21,7 +21,7 @@ router.post('/configure_nodemailer',function(req,res){
 })
 
 
-router.post('/edit_nodemailer',function(req,res){
+router.post('/edit_nodemailer',authenticated(['ADMIN']),function(req,res){
 	db.models.Nodemailer.findOne({_id: req.body._id}).then((nodemailer_data)=>{
 		nodemailer_data = {
 			mail: req.body.mail,
@@ -44,7 +44,7 @@ router.post('/edit_nodemailer',function(req,res){
 	})
 });
 
-router.post('/send_nodemailer',function(req,res){
+router.post('/send_nodemailer',authenticated(['ADMIN']),function(req,res){
 	db.models.Nodemailer.findOne({_id: req.body._id}).then((nodemailer_data)=>{
        
         var smtpTransport = nodemailer.createTransport("SMTP", {

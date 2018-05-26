@@ -2,7 +2,7 @@
 var express = require('express');
 var router = express.Router(); 
 
-router.post('/marks_get',function(req,res){
+router.post('/marks_get',authenticated(['ADMIN','TEACHER','STUDENT']),function(req,res){
 	
 	db.models.Marks.findOne({_id: req.body._id,session:req.body.session}).then((marks)=>{
 		console.log(marks);
@@ -14,7 +14,7 @@ router.post('/marks_get',function(req,res){
 });
 
 
-router.post('/marks',function(req,res){
+router.post('/marks',authenticated(['ADMIN','TEACHER','STUDENT']),function(req,res){
 	var marks = new db.models.Marks({
         exam_ref: req.body.exam_ref,
 	    students: req.body.students,

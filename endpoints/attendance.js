@@ -2,7 +2,7 @@
 var express = require('express');
 var router = express.Router();
 
-router.post('/attendance_student_class',function(req,res){
+router.post('/attendance_student_class',authenticated(['ADMIN']),function(req,res){
 	db.models.Attendance_Student.find({class_ref: req.body.class_ref,session:req.body.session}).then((student_attendance)=>{
 		res.json(student_attendance);
 		console.log(student_attendance);
@@ -12,8 +12,8 @@ router.post('/attendance_student_class',function(req,res){
 	})
 })
 
-router.post('/attendance_student_day',function(req,res){
-	db.models.Attendance_Student.findOne({_id:req.body._id,session:req.body.session}).populate('students.student', 'name erp_id parent_contact').then((student_attendance)=>{
+router.post('/attendance_student_day',authenticated(['ADMIN','STUDENT']),function(req,res){
+	db.models.Attendance_Student.findOne({erp_id:req.body.erp_id,session:req.body.session}).populate('students.student', 'name erp_id parent_contact').then((student_attendance)=>{
 		res.json(student_attendance);
 		console.log(student_attendance);
 	}).catch((err)=>{
@@ -22,7 +22,7 @@ router.post('/attendance_student_day',function(req,res){
 	})
 })
 
-router.post('/attendance_student_get_for_class_ref',function(req,res){
+router.post('/attendance_student_get_for_class_ref',authenticated(['ADMIN']),function(req,res){
 	db.models.Attendance_Student.find({date:req.body.date,session:req.body.session, class_ref: req.body.class_ref}).populate('students.student', 'name erp_id parent_contact').then((student_attendance)=>{
 		res.json(student_attendance);
 		console.log(student_attendance);
@@ -32,14 +32,14 @@ router.post('/attendance_student_get_for_class_ref',function(req,res){
 	})
 })
 
-router.post('/attendance_teacher_day',function(req,res){
-	db.models.Attendance_Accountant.findOne({_id: req.body.id,session:req.body.session}).then((teacher_attendance)=>{
+router.post('/attendance_teacher_day',authenticated(['ADMIN','TEACHER','ACCOUNTANT']),function(req,res){
+	db.models.Attendance_Accountant.findOne({erp_id: req.body.erp_id, session: req.body.session}).then((teacher_attendance)=>{
 		res.json(teacher_attendance);
 		console.log(teacher_attendance);
 	})
 })
 
-router.post('/attendance_teacher_all',function(req,res){
+router.post('/attendance_teacher_all',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
 	db.models.Attendance_Teacher.find({date: req.body.date, session: req.body.session}).populate('staffs.staff', 'name erp_id phone').then((teacher_attendance)=>{
 		res.json(teacher_attendance);
 		console.log(teacher_attendance);
@@ -49,8 +49,8 @@ router.post('/attendance_teacher_all',function(req,res){
 	})
 })
 
-router.post('/attendance_accountant_day',function(req,res){
-	db.models.Attendance_Accountant.findOne({_id: req.body.id,session:req.body.session}).then((accountant_attendance)=>{
+router.post('/attendance_accountant_day',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
+	db.models.Attendance_Accountant.findOne({erp_id: req.body.erp_id, session: req.body.session}).then((accountant_attendance)=>{
 		res.json(accountant_attendance);
 		console.log(accountant_attendance);
 	}).catch((err)=>{
@@ -59,7 +59,7 @@ router.post('/attendance_accountant_day',function(req,res){
 	})
 })
 
-router.post('/attendance_accountant_all',function(req,res){
+router.post('/attendance_accountant_all',authenticated(['ADMIN']),function(req,res){
 	db.models.Attendance_Accountant.find({date: req.body.date, session: req.body.session}).populate('staffs.staff', 'name erp_id phone').then((accountant_attendance)=>{
 		res.json(accountant_attendance);
 		console.log(accountant_attendance);
@@ -70,8 +70,8 @@ router.post('/attendance_accountant_all',function(req,res){
 })
 
 
-router.post('/attendance_librarian_day',function(req,res){
-	db.models.Attendance_Librarian.find({_id: req.body.id,session:req.body.session}).then((librarian_attendance)=>{
+router.post('/attendance_librarian_day',authenticated(['ADMIN','LIBRARIAN']),function(req,res){
+	db.models.Attendance_Librarian.find({erp_id: req.body.erp_id, session: req.body.session}).then((librarian_attendance)=>{
 		res.json(librarian_attendance);
 		console.log(librarian_attendance);
 	}).catch((err)=>{
@@ -80,7 +80,7 @@ router.post('/attendance_librarian_day',function(req,res){
 	})
 })
 
-router.post('/attendance_librarian_all',function(req,res){
+router.post('/attendance_librarian_all',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
 	db.models.Attendance_Librarian.find({date: req.body.date, session: req.body.session}).populate('staffs.staff', 'name erp_id phone').then((librarian_attendance)=>{
 		res.json(librarian_attendance);
 		console.log(librarian_attendance);
@@ -91,7 +91,7 @@ router.post('/attendance_librarian_all',function(req,res){
 })
 
 
-router.post('/attendance_student',function(req,res){
+router.post('/attendance_student',authenticated(['ADMIN']),function(req,res){
 	db.models.Attendance_Student.findOne({date:req.body.date,session:req.body.session, class_ref: req.body.class_ref})
 	.then((student)=>{
 
@@ -141,7 +141,7 @@ router.post('/attendance_student',function(req,res){
 
 
 
-router.post('/attendance_teacher',function(req,res){
+router.post('/attendance_teacher',authenticated(['ADMIN']),function(req,res){
 	db.models.Attendance_Teacher.findOne({date:req.body.date,session:req.body.session})
 	.then((teacher)=>{
 
@@ -185,7 +185,7 @@ router.post('/attendance_teacher',function(req,res){
 })
 
 
-router.post('/attendance_accountant',function(req,res){
+router.post('/attendance_accountant',authenticated(['ADMIN']),function(req,res){
 	db.models.Attendance_Accountant.findOne({date:req.body.date,session:req.body.session})
 	.then((accountant)=>{
 
@@ -228,7 +228,7 @@ router.post('/attendance_accountant',function(req,res){
 	
 })
 
-router.post('/attendance_librarian',function(req,res){
+router.post('/attendance_librarian',authenticated(['ADMIN']),function(req,res){
 	db.models.Attendance_Librarian.findOne({date:req.body.date,session:req.body.session})
 	.then((librarian)=>{
 
@@ -272,7 +272,7 @@ router.post('/attendance_librarian',function(req,res){
 })
 
 
-router.post('/attendance_other',function(req,res){
+router.post('/attendance_other',authenticated(['ADMIN']),function(req,res){
 	db.models.Attendance_Other.findOne({date:req.body.date,session:req.body.session})
 	.then((other)=>{
 
@@ -316,8 +316,8 @@ router.post('/attendance_other',function(req,res){
 })
 
 
-router.post('/attendance_other_day',function(req,res){
-	db.models.Attendance_Other.find({_id: req.body.id,session:req.body.session}).populate().then((other_attendance)=>{
+router.post('/attendance_other_day',authenticated(['ADMIN','OTHER']),function(req,res){
+	db.models.Attendance_Other.find({erp_id: req.body.erp_id,session: req.body.session}).populate().then((other_attendance)=>{
 		res.json(other_attendance);
 		console.log(other_attendance);
 	}).catch((err)=>{
@@ -326,7 +326,7 @@ router.post('/attendance_other_day',function(req,res){
 	})
 })
 
-router.post('/attendance_other_all',function(req,res){
+router.post('/attendance_other_all',authenticated(['ADMIN']),function(req,res){
 	db.models.Attendance_Other.find({date: req.body.date, session: req.body.session}).populate('staffs.staff', 'name erp_id phone').then((other_attendance)=>{
 		res.json(other_attendance);
 		console.log(other_attendance);

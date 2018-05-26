@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router(); 
 
-router.post('/subject_get',function(req,res){
+router.post('/subject_get',authenticated(['ADMIN']),function(req,res){
 	
 	db.models.Subject({_id: req.body._id}).then((subject)=>{
 		console.log(subject);
@@ -13,7 +13,7 @@ router.post('/subject_get',function(req,res){
 });
 
 
-router.post('/subject_get_all',function(req,res){
+router.post('/subject_get_all',authenticated(['ADMIN']),function(req,res){
 	db.models.Subject.find().then((subjects)=>{
 		console.log(subjects);
 		res.json(subjects);
@@ -26,7 +26,7 @@ router.post('/subject_get_all',function(req,res){
 
 
 
-router.post('/subject',function(req,res){
+router.post('/subject',authenticated(['ADMIN']),function(req,res){
 	db.models.Subject.findOne({name:req.body.name}).then((subject)=>{
 		if(!subject){
 			var subject = new db.models.Subject({
@@ -53,7 +53,7 @@ router.post('/subject',function(req,res){
 });
 
 
-router.post('/subject_edit',function(req,res){
+router.post('/subject_edit',authenticated(['ADMIN']),function(req,res){
 	db.models.Subject.findOne({_id:req.body._id}).then((subjectEdited)=>{
       if(subjectEdited){
     

@@ -3,7 +3,7 @@ var express = require('express');
 var router = express.Router();
 var twilio = require('twilio');
 
-router.post('/configure_twilio',function(req,res){
+router.post('/configure_twilio',authenticated(['ADMIN']),function(req,res){
 	
 	var twilio_data = new db.models.Twilio({
           account_sid: req.body.account_sid,
@@ -21,7 +21,7 @@ router.post('/configure_twilio',function(req,res){
 });
 
 
-router.post('/edit_twilio',function(req,res){
+router.post('/edit_twilio',authenticated(['ADMIN']),function(req,res){
     db.models.Twilio.findOne({_id: req.body._id}).then((twilio_data)=>{
     	
     		twilio_data.account_sid = req.body.account_sid;
@@ -39,7 +39,7 @@ router.post('/edit_twilio',function(req,res){
 });
 
 
-router.post('/send_twilio',function(req,res){
+router.post('/send_twilio',authenticated(['ADMIN']),function(req,res){
 	db.models.Twilio.findOne({_id: req.body._id}).then((twilio_data)=>{
 		var client = new twilio(twilio_data.account_sid,twilio_data.auth_token);
         client.messages.create({

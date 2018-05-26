@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router(); 
 
-router.post('/teacher_get_erp_id', function(){
+router.post('/teacher_get_erp_id',authenticated(['ADMIN','ACCOUNTANT']),function(){
   db.models.Teacher.findOne({ erp_id: req.body.erp_id, session:req.body.session })
      .then((teacher)=>{
        res.json(teacher);
@@ -11,7 +11,7 @@ router.post('/teacher_get_erp_id', function(){
      })
 })
 
-router.post('/teacher_get',function(req,res){
+router.post('/teacher_get',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
 	
 	db.models.Teacher.findOne({_id: req.body._id}).then((teacher)=>{
 		console.log(teacher);
@@ -22,7 +22,7 @@ router.post('/teacher_get',function(req,res){
 	})
 });
 
-router.post('/teacher_get_all',function(req,res){
+router.post('/teacher_get_all',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
 	db.models.Teacher.find({session:req.body.session}).then((teachers)=>{
     console.log(teachers);
 		res.json(teachers);
@@ -32,7 +32,7 @@ router.post('/teacher_get_all',function(req,res){
 });
 
 
-router.post('/teacher',function(req,res,next){
+router.post('/teacher',authenticated(['ADMIN','ACCOUNTANT']),function(req,res,next){
 
 
  db.models.User.findOne({username:req.body.username}).then((user)=>{

@@ -22,7 +22,7 @@ module.exports.models = {
 	Message: require('./data').Message,
 	Marks: require('./data').Marks,
 	Exam: require('./data').Exam,
-	Calendar_Event: require('./data').Calendar_Event,
+	Calendar: require('./data').Calendar,
 	Attendance_Student: require('./data').Student_Attendance,
 	Attendance_Teacher: require('./data').Teacher_Attendance,
 	Attendance_Accountant: require('./data').Accountant_Attendance,

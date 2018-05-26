@@ -3,7 +3,7 @@ var express = require('express');
 var router = express.Router(); 
 
 
-router.post('/system_get',function(req,res){
+router.post('/system_get',authenticated(['ADMIN']),function(req,res){
    db.models.System.findOne({}).then((system)=>{
    	 res.json(system);
    }).catch((err)=>{
@@ -12,7 +12,7 @@ router.post('/system_get',function(req,res){
    })
 })
 
-router.post('/system_get_session',function(req,res){
+router.post('/system_get_session',authenticated(['ADMIN','ACCOUNTANT','LIBRARIAN','TEACHER','OTHER','STUDENT']),function(req,res){
    db.models.System.findOne({}).then((system)=>{
    	 res.json({session:system.current_session});
    }).catch((err)=>{
@@ -21,7 +21,7 @@ router.post('/system_get_session',function(req,res){
    })
 })
 
-router.post('/system',function(req,res){
+router.post('/system',authenticated(['ADMIN']),function(req,res){
 	db.models.System.findOne({email:req.body.email}).then((system)=>{
 		if(system){
 			system.name = req.body.name;

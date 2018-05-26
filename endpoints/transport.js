@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router(); 
 
-router.post('/transport_get',function(req,res){
+router.post('/transport_get',authenticated(['ADMIN']),function(req,res){
 	
 	db.models.Transport.findOne({_id: req.body._id}).then((vehicle)=>{
 		console.log(vehicle);
@@ -12,7 +12,7 @@ router.post('/transport_get',function(req,res){
 	})
 });
 
-router.post('/transport_get_all',function(req,res){
+router.post('/transport_get_all',authenticated(['ADMIN']),function(req,res){
 	db.models.Transport.find({session:req.body.session}).then((vehicles)=>{
 		console.log(vehicles);
 		res.json(vehicles);
@@ -24,7 +24,7 @@ router.post('/transport_get_all',function(req,res){
 })
 
 
-router.post('/transport',function(req,res){
+router.post('/transport',authenticated(['ADMIN']),function(req,res){
 	db.models.Transport.findOne({name:req.body.name,session:req.body.session}).then((transport)=>{
 		if(!transport){
 			var transport = new db.models.Transport({
@@ -54,7 +54,7 @@ router.post('/transport',function(req,res){
 });
 
 
-router.post('/transport_edit',function(req,res){
+router.post('/transport_edit',authenticated(['ADMIN']),function(req,res){
 	db.models.Transport.findOne({_id:req.body._id}).then((transportEdited)=>{
       if(transportEdited){
     

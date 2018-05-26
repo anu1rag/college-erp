@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router(); 
 
-router.post('/student_get',function(req,res){
+router.post('/student_get',authenticated(['ADMIN','LIBRARIAN','ACCOUNTANT']),function(req,res){
 	
 	db.models.Student.findOne({_id: req.body._id}).then((students)=>{
 		console.log(students);
@@ -11,8 +11,8 @@ router.post('/student_get',function(req,res){
 		res.json("some error occured")
 	})
 });
-
-router.post('/student_get_for_erp_id',function(req,res){
+//
+router.post('/student_get_for_erp_id',authenticated(['ADMIN','LIBRARIAN','ACCOUNTANT']),function(req,res){
    if (!req.body.erp_id || !req.body.session){
     res.json('Please enter erpid and session');
    }
@@ -32,8 +32,8 @@ router.post('/student_get_for_erp_id',function(req,res){
   })
 }
 })
-
-router.post('/students_get_for_class_ref',function(req,res){
+//authenticated['ADMIN','LIBRARIAN','ACCOUNTANT'],
+router.post('/students_get_for_class_ref',authenticated(['ADMIN','LIBRARIAN','ACCOUNTANT']),function(req,res){
   console.log(count++);
 	db.models.Student.find({class_ref:req.body.class_ref,session:req.body.session}).then((student)=>{
 		res.json(student);
@@ -42,7 +42,7 @@ router.post('/students_get_for_class_ref',function(req,res){
 	})
 });
 //authenticated(['ADMIN'])
-router.post('/student',function(req,res,next){
+router.post('/student',authenticated(['ADMIN']),function(req,res,next){
 
     console.log("idhar aya");
  db.models.User.findOne({username:req.body.username}).then((user)=>{

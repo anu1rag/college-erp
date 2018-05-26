@@ -2,7 +2,7 @@
 var express = require('express');
 var router = express.Router(); 
 
-router.post('/routine_get',function(req,res){
+router.post('/routine_get',authenticated(['ADMIN','TEACHER','STUDENT']),function(req,res){
 	
 	db.models.Routine.findOne({_id: req.body._id,session:req.body.session}).then((routine)=>{
 		console.log(routine);
@@ -13,7 +13,7 @@ router.post('/routine_get',function(req,res){
 	})
 });
 
-router.post('/routine_get_class',function(req,res){
+router.post('/routine_get_class',authenticated(['ADMIN','TEACHER','STUDENT']),function(req,res){
     db.models.Routine.find({class_ref: req.body.class_ref,session:req.body.session}).populate('subject_ref').then((routine)=>{
 		console.log(routine);
 		res.json(routine);
@@ -23,7 +23,7 @@ router.post('/routine_get_class',function(req,res){
 	})	
 });
 
-router.post('/routine_get_teacher',function(req,res){
+router.post('/routine_get_teacher',authenticated(['ADMIN','TEACHER','STUDENT']),function(req,res){
 	   db.models.Routine.find({teacher_ref: req.body.teacher_ref,session:req.body.session}).populate('class_ref subject_ref').then((routine)=>{
 		console.log(routine);
 		res.json(routine);
@@ -34,7 +34,7 @@ router.post('/routine_get_teacher',function(req,res){
 });
 
 
-router.post('/routine_get_all',function(req,res){
+router.post('/routine_get_all',authenticated(['ADMIN','TEACHER','STUDENT']),function(req,res){
 	db.models.Routine.find({session:req.body.session}).populate('subject_ref').then((routines)=>{
 		console.log(routines);
 		res.json(routines);
@@ -46,7 +46,7 @@ router.post('/routine_get_all',function(req,res){
 })
 
 
-router.post('/routine',function(req,res){
+router.post('/routine',authenticated(['ADMIN']),function(req,res){
 	console.log(req.body);
 	if(!req.body.class_ref || !req.body.teacher_ref || !req.body.subject_ref){
 		res.json('Values not found');
@@ -89,7 +89,7 @@ router.post('/routine',function(req,res){
 });
 
 
-router.post('/routine_edit',function(req,res){
+router.post('/routine_edit',authenticated(['ADMIN']),function(req,res){
 	db.models.Routine.findOne({_id:req.body._id,session:req.body.session}).then((routineEdited)=>{
       if(routineEdited){
     

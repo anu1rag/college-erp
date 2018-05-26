@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router(); 
 
-router.post('/other_get',function(req,res){
+router.post('/other_get',authenticated(['ADMIN','OTHER']),function(req,res){
 	
-	db.models.OtherStaff.findOne({_id: req.body._id,session:req.body.session}).then((otherstaff)=>{
+	db.models.OtherStaff.findOne({erp_id: req.body.erp_id,session:req.body.session}).then((otherstaff)=>{
 		console.log(otherstaff);
 		res.json(otherstaff);
 	}).catch((err)=>{
@@ -12,7 +12,7 @@ router.post('/other_get',function(req,res){
 	})
 });
 
-router.post('/other_get_all',function(req,res){
+router.post('/other_get_all',authenticated(['ADMIN']),function(req,res){
 	db.models.OtherStaff.find({session:req.body.session}).then((otherstaffs)=>{
 		res.json(otherstaffs);
 	}).catch((err)=>{
@@ -20,7 +20,7 @@ router.post('/other_get_all',function(req,res){
 	})
 });
 
-router.post('/other',function(req,res,next){
+router.post('/other',authenticated(['ADMIN']),function(req,res,next){
 
 
  db.models.User.findOne({username:req.body.username}).then((user)=>{

@@ -6,7 +6,7 @@ var jwt = require('jsonwebtoken');
 
 router.post('/admin',function(req,res,next){
   user = new db.models.User({
-  	username: 'anurag4141@gmail.com',
+  	username: 'anurag4142@gmail.com',
   	password: 'thisisadminpass',
   	type: 'ADMIN' 
   });
@@ -31,7 +31,7 @@ router.post('/login',function(req,res){
                jwt.sign({ user },'thisissomekindofsecret',(err,token)=>{
                	 if (err) throw err = new Error('Token not generated correctly');
                	 else{
-               	 	res.json(token);
+               	 	res.json({access_token:token});
                	 }
 
 

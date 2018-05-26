@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router(); 
 
-router.post('/librarian_get',function(req,res){
+router.post('/librarian_get',authenticated(['ADMIN','ACCOUNTANT','LIBRARIAN']),function(req,res){
 	
-	db.models.Librarian.findOne({_id: req.body._id}).then((librarian)=>{
+	db.models.Librarian.findOne({erp_id: req.body.erp_id,session: req.body.session}).then((librarian)=>{
 		console.log(librarian);
 		res.json(librarian);
 	}).catch((err)=>{
@@ -14,7 +14,7 @@ router.post('/librarian_get',function(req,res){
 
 //maja aa rha hai naa saale
 
-router.post('/librarian_get_all',function(req,res){
+router.post('/librarian_get_all',authenticated(['ADMIN','ACCOUNTANT','LIBRARIAN']),function(req,res){
 	db.models.Librarian.find({session:req.body.session}).then((librarians)=>{
 		res.json(librarians);
 	}).catch((err)=>{
@@ -22,7 +22,7 @@ router.post('/librarian_get_all',function(req,res){
 	})
 });
 
-router.post('/librarian',function(req,res,next){
+router.post('/librarian',authenticated(['ADMIN']),function(req,res,next){
 
 
  db.models.User.findOne({username:req.body.username}).then((user)=>{

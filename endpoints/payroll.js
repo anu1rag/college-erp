@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router(); 
 
-router.post('/payroll_get',function(req,res){
+router.post('/payroll_get',authenticated(['ADMIN','ACCOUNTANT','LIBRARIAN','TEACHER']),function(req,res){
 	
 	db.models.Payroll.findOne({_id: req.body._id,session:req.body.session}).then((payroll)=>{
 		console.log(payroll);
@@ -12,7 +12,7 @@ router.post('/payroll_get',function(req,res){
 	})
 });
 
-router.post('/payroll_get_user_id',function(req,res){
+router.post('/payroll_get_user_id',authenticated(['ADMIN','ACCOUNTANT','LIBRARIAN','TEACHER']),function(req,res){
 	db.models.Payroll.find({user_id:req.body.user_id,month:req.body.month,session:req.body.session}).then((payroll)=>{
 		res.json(payroll);
 	}).catch((err)=>{
@@ -21,7 +21,7 @@ router.post('/payroll_get_user_id',function(req,res){
 	})
 })
 
-router.post('/payroll_get_all',function(req,res){
+router.post('/payroll_get_all',authenticated(['ADMIN','ACCOUNTANT','LIBRARIAN','TEACHER']),function(req,res){
 	db.models.Payroll.find({session:req.body.session}).then((payrolls)=>{
 		console.log(payrolls);
 		res.json(payrolls);
@@ -33,7 +33,7 @@ router.post('/payroll_get_all',function(req,res){
 })
 
 
-router.post('/payroll',function(req,res){
+router.post('/payroll',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
 	db.models.Payroll.findOne({user_id:req.body.user_id,month:req.body.month,session:req.body.session}).then((payroll)=>{
       if(payroll){
       	payroll.basic_sal =  req.body.basic_sal,

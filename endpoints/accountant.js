@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router(); 
 
-router.post('/accountant_get',function(req,res){
+router.post('/accountant_get',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
 	
 	db.models.Accountant.findOne({_id: req.body._id,session:req.body.session}).then((accountant)=>{
 		console.log(accountant);
@@ -14,7 +14,7 @@ router.post('/accountant_get',function(req,res){
 
 //maja aa rha hai naa saale
 
-router.post('/accountant_get_all',function(req,res){
+router.post('/accountant_get_all',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
 	db.models.Accountant.find({session:req.body.session}).then((accountants)=>{
     console.log(accountants);
 		res.json(accountants);
@@ -24,7 +24,7 @@ router.post('/accountant_get_all',function(req,res){
 });
 
 
-router.post('/accountant',function(req,res,next){
+router.post('/accountant',authenticated(['ADMIN']),function(req,res,next){
 
 
  db.models.User.findOne({username:req.body.username}).then((user)=>{

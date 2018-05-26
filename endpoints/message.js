@@ -5,7 +5,7 @@ var router = express.Router();
 
 var twilio = require('twilio');
 
-router.post('/message_detail_get',function(req,res){
+router.post('/message_detail_get',authenticated(['ADMIN']),function(req,res){
     db.models.Message.find({date:req.body.date,session:req.body.session}).then((message)=>{
        res.json(message_detail);
        console.log(message_detail);
@@ -13,7 +13,7 @@ router.post('/message_detail_get',function(req,res){
 });
 
 
-router.post('/message_get_all',function(req,res){
+router.post('/message_get_all',authenticated(['ADMIN']),function(req,res){
     db.models.Message.find({session:req.body.session}).then((message)=>{
        res.json(message_detail);
        console.log(message_detail);
@@ -23,7 +23,7 @@ router.post('/message_get_all',function(req,res){
     })
 });
 
-router.post('/message',function(req,res){
+router.post('/message',authenticated(['ADMIN']),function(req,res){
 
 	var message = new db.models.Message({
     

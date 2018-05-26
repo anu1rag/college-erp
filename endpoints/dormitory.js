@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router(); 
 
-router.post('/dormitory_get',function(req,res){
+router.post('/dormitory_get',authenticated(['ADMIN']),function(req,res){
 	
 	db.models.Dormitory.findOne({_id: req.body._id}).then((dormitory)=>{
 		console.log(dormitory);
@@ -12,7 +12,7 @@ router.post('/dormitory_get',function(req,res){
 	})
 });
 
-router.post('/dormitory_get_all',function(req,res){
+router.post('/dormitory_get_all',authenticated(['ADMIN']),function(req,res){
 	db.models.Dormitory.find().then((dormitories)=>{
 		console.log(dormitories);
 		res.json(dormitories);
@@ -24,7 +24,7 @@ router.post('/dormitory_get_all',function(req,res){
 })
 
 
-router.post('/dormitory',function(req,res){
+router.post('/dormitory',authenticated(['ADMIN']),function(req,res){
 	db.models.Dormitory.findOne({name:req.body.name}).then((dormitory)=>{
 		if(!dormitory){
 			var dormitory = new db.models.Dormitory({
@@ -55,7 +55,7 @@ router.post('/dormitory',function(req,res){
 });
 
 
-router.post('/dormitory_edit',function(req,res){
+router.post('/dormitory_edit',authenticated(['ADMIN']),function(req,res){
 	db.models.Dormitory.findOne({_id:req.body._id}).then((dormitoryEdited)=>{
       if(dormitoryEdited){
     
@@ -85,7 +85,5 @@ router.post('/dormitory_edit',function(req,res){
 
 });
 
-
-module.exports = router;
 
 module.exports = router;

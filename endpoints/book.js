@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router(); 
 
-router.post('/book_get',function(req,res){
+router.post('/book_get',authenticated(['LIBRARIAN']),function(req,res){
 	
 	db.models.Book.findOne({_id: req.body._id}).then((book)=>{
 		console.log(book);
@@ -12,7 +12,7 @@ router.post('/book_get',function(req,res){
 	})
 });
 
-router.post('/book_get_all',function(req,res){
+router.post('/book_get_all',authenticated(['LIBRARIAN']),function(req,res){
 	db.models.Book.find({}).populate('assigned_to').then((books)=>{
 		console.log(books);
 		res.json(books);
@@ -24,7 +24,7 @@ router.post('/book_get_all',function(req,res){
 })
 
 
-router.post('/book',function(req,res){
+router.post('/book',authenticated(['LIBRARIAN']),function(req,res){
 	db.models.Book.findOne({title:req.body.title,isbn:req.body.isbn}).then((book)=>{
 		if(!book){
 			var book = new db.models.Book({
@@ -57,7 +57,7 @@ router.post('/book',function(req,res){
 });
 
 
-router.post('/book_edit',function(req,res){
+router.post('/book_edit',authenticated(['LIBRARIAN']),function(req,res){
 	console.log(req.body);
 	db.models.Book.findOne({_id:req.body._id}).then((bookEdited)=>{
       if(bookEdited){

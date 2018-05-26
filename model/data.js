@@ -733,19 +733,24 @@ var calendar_event = new Schema({
 	
 	
 
-	date: {
+	start: {
+		type: String,
+		required: true
+	},
+
+	end: {
+		type: String,
+		required: true
+	},
+
+	type: {
 		type: String,
 		required: true
 	},
 
 	title:{
 		type: String,
-
 		required: true
-	},
-
-	description:{
-		type: String
 	},
 
 	session: {
@@ -1184,7 +1189,7 @@ module.exports = {
 	Message: mongoose.model('Message',message),
 	Marks: mongoose.model('Marks',marks),
 	Exam: mongoose.model('Exams',exam),
-	Calendar_Event: mongoose.model('Calendar_Event',calendar_event),
+	Calendar: mongoose.model('Calendar',calendar_event),
 	Student_Attendance: mongoose.model('Student_Attendance', student_attendance),
 	Teacher_Attendance: mongoose.model('Teacher_Attendance',teacher_attendance),
 	Accountant_Attendance: mongoose.model('Accountant_Attendance',accountant_attendance),
