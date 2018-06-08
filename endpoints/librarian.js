@@ -22,6 +22,18 @@ router.post('/librarian_get_all',authenticated(['ADMIN','ACCOUNTANT','LIBRARIAN'
 	})
 });
 
+
+router.post('/librarian_get_for_user_id',authenticated(['LIBRARIAN']),function(req,res){
+  
+  db.models.Librarian.findOne({user_id: req.body.user_id}).then((librarian)=>{
+    console.log(librarian);
+    res.json(librarian);
+  }).catch((err)=>{
+    console.log(err);
+    res.json("some error occured while fetching librarian using user_id");
+  })
+});
+
 router.post('/librarian',authenticated(['ADMIN']),function(req,res,next){
 
 

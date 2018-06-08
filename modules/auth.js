@@ -18,7 +18,7 @@ module.exports = {
             }
 
             if(session_token){
-            	jwt.verify(session_token,'thisissomekindofsecret',function(err,decoded){
+            	jwt.verify(session_token,'@5bjuitioh45t_#vkiyyilr$%_c',function(err,decoded){
             		if (err) throw err = new Error('Error while decoding token');
             		else if(!decoded){
                        res.json('Invalid token');

@@ -81,7 +81,7 @@ var teacher = new Schema({
 		type: String
 	},
 
-	bus_num: {
+	transport: {
 		type: Schema.Types.ObjectId,
 		ref: 'Transport'
 
@@ -185,7 +185,7 @@ var student = new Schema({
 		type: String
 	},
 
-	bus_num: {
+	transport: {
 		type: Schema.Types.ObjectId,
 		ref: 'Transport'
 
@@ -241,6 +241,47 @@ var count = new Schema({
 
 });
 
+var fees = new Schema({
+	
+	date:{
+		type: String,
+		required: true
+	},
+
+    class_ref: {
+    	type: Schema.Types.ObjectId,
+    	ref: 'NewClass'
+    },
+
+    students:[{
+    	student: {
+    		type:Schema.Types.ObjectId,
+    		ref: 'Student'
+    	},
+
+       status: {
+       	type: String,
+       	required: true,
+       	default: 'Unpaid',
+       	enum: ['Paid', 'Unpaid']
+       },
+
+       
+
+    }],
+
+    fees:{
+       	   type: Array,
+       	   required: true
+       },
+
+    session: {
+    	type: String,
+    	required: true
+    }
+
+})
+
 var otherstaff = new Schema({
 	
 	user_id: {
@@ -294,7 +335,7 @@ var otherstaff = new Schema({
 		type: String
 	},
 
-	bus_num: {
+	transport: {
 		type: Schema.Types.ObjectId,
 		ref: 'Transport'
 
@@ -384,7 +425,7 @@ var librarian = new Schema({
 		type: String
 	},
 
-	bus_num: {
+	transport: {
 		type: Schema.Types.ObjectId,
 		ref: 'Transport'
 
@@ -475,7 +516,7 @@ var accountant = new Schema({
 		type: String
 	},
 
-	bus_num: {
+	transport: {
 		type: Schema.Types.ObjectId,
 		ref: 'Transport'
 
@@ -512,6 +553,7 @@ var accountant = new Schema({
 	   
 }); 
 
+
 var newclass = new Schema({
 	name: {
 		type:  String,
@@ -531,6 +573,7 @@ var newclass = new Schema({
 });
 
 
+
 var subject =  new Schema({
 	
 
@@ -545,6 +588,7 @@ var subject =  new Schema({
    }
 
 });
+
 
 var student_attendance = new Schema({
    
@@ -950,12 +994,6 @@ var dormitory = new Schema({
        enum: ['AC','Non AC']
     },
 
-    erp_id:{
-    	type:String,
-    	required:true
-    },
-    
-
     session: {
    	   type: String,
    	   required: true
@@ -1197,5 +1235,6 @@ module.exports = {
 	Other_Attendance: mongoose.model('Other_Attendance',other_attendance),
 	Twilio : mongoose.model('Twilio',twilio),
 	Nodemailer: mongoose.model('Nodemailer',nodemailer),
-	Count: mongoose.model('Count', count)
+	Count: mongoose.model('Count', count),
+	Fees: mongoose.model('Fees', fees)
 }

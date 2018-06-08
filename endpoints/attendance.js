@@ -2,6 +2,7 @@
 var express = require('express');
 var router = express.Router();
 
+
 router.post('/attendance_student_class',authenticated(['ADMIN']),function(req,res){
 	db.models.Attendance_Student.find({class_ref: req.body.class_ref,session:req.body.session}).then((student_attendance)=>{
 		res.json(student_attendance);
@@ -12,15 +13,54 @@ router.post('/attendance_student_class',authenticated(['ADMIN']),function(req,re
 	})
 })
 
+
 router.post('/attendance_student_day',authenticated(['ADMIN','STUDENT']),function(req,res){
-	db.models.Attendance_Student.findOne({erp_id:req.body.erp_id,session:req.body.session}).populate('students.student', 'name erp_id parent_contact').then((student_attendance)=>{
-		res.json(student_attendance);
-		console.log(student_attendance);
+	db.models.Attendance_Student.find({class_ref:req.body.class_ref,session:req.body.session}).then((student_attendance)=>{
+	   let studentArray = [];
+	   let index = 0;
+       let stlen = student_attendance.length-1;
+       let stindex = student_attendance[stlen]['students'].length;
+       for(let i = 0; i<stindex;i++){
+       	console.log(student_attendance[stlen]['students'][i]['student']);
+         if(req.body.student_id === String(student_attendance[stlen]['students'][i]['student'])){
+           
+         	index = i;
+         	console.log("index is",index);
+         	break;
+
+         }
+       }
+       
+       for(let i=0;i<=stlen;i++){
+         if(index <= student_attendance[i]['students'].length-1){
+            studentArray.push({date:student_attendance[i]['date'],status:student_attendance[i]['students'][index]['status']});
+            console.log(studentArray);
+         	//studentArray.push(student_attendance[i]['students'][index])
+         }
+
+         else{
+
+         	studentArray.push({date:student_attendance[i]['date'], status:'NA'});
+         	console.log(studentArray);
+         }
+       }
+        let sortingArray = studentArray.map((value)=>{
+           return JSON.stringify(value);
+        })
+
+        sortingArray.sort();
+        console.log(sortingArray);
+        let sortedArray = sortingArray.map((value)=>{
+        	return JSON.parse(value);
+        })
+        res.json(sortedArray);
+		console.log("studentArray",studentArray.sort());
 	}).catch((err)=>{
 		console.log(err);
 		throw err = new Error('Some error occured');
 	})
 })
+
 
 router.post('/attendance_student_get_for_class_ref',authenticated(['ADMIN']),function(req,res){
 	db.models.Attendance_Student.find({date:req.body.date,session:req.body.session, class_ref: req.body.class_ref}).populate('students.student', 'name erp_id parent_contact').then((student_attendance)=>{
@@ -142,11 +182,12 @@ router.post('/attendance_student',authenticated(['ADMIN']),function(req,res){
 
 
 router.post('/attendance_teacher',authenticated(['ADMIN']),function(req,res){
+	console.log("Teacher aage se aya hai:",req.body.staffs);
 	db.models.Attendance_Teacher.findOne({date:req.body.date,session:req.body.session})
 	.then((teacher)=>{
-
+    console.log("Teacher from db:",teacher);
 	if(teacher){
-		
+		console.log("Teacher mila hai:",teacher);
 	   teacher.date = req.body.date,
 	   teacher.staffs = req.body.staffs,
 	   teacher.finalize = req.body.finalize,
@@ -154,6 +195,7 @@ router.post('/attendance_teacher',authenticated(['ADMIN']),function(req,res){
 	   
 	   teacher.save().then((attendance_teacher)=>{
 	   	 res.json(attendance_teacher)
+	   	 console.log("Teacher purana save hua hai:",attendance_teacher);
 	   }).catch((err)=>{
 	   	console.log(err);
 	   	throw err = new Error('Some error while saving attendance teacher');
@@ -161,7 +203,7 @@ router.post('/attendance_teacher',authenticated(['ADMIN']),function(req,res){
 	}
 
 	else{
-
+      console.log("Teacher mila ni:",teacher);
       var attendance_teacher = new db.models.Attendance_Teacher({
 	   date: req.body.date,
 	   staffs: req.body.staffs,
@@ -171,8 +213,10 @@ router.post('/attendance_teacher',authenticated(['ADMIN']),function(req,res){
 
 	attendance_teacher.save().then((attendance_teacher)=>{
      res.json(attendance_teacher);
+     console.log("Teacher naya save hau hai:",attendance_teacher);
      console.log(attendance_teacher);
 	}).catch((err)=>{
+
 		console.log(err);
 		throw err = Error('Some error occured');
 	})

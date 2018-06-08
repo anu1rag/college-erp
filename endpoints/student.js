@@ -8,9 +8,22 @@ router.post('/student_get',authenticated(['ADMIN','LIBRARIAN','ACCOUNTANT']),fun
 		res.json(students);
 	}).catch((err)=>{
 		console.log(err);
-		res.json("some error occured")
+		res.json("some error occured while fetching student using _id");
 	})
 });
+
+router.post('/student_get_for_user_id',authenticated(['STUDENT']),function(req,res){
+  
+  db.models.Student.findOne({user_id: req.body.user_id}).then((student)=>{
+    console.log(student);
+    res.json(student);
+  }).catch((err)=>{
+    console.log(err);
+    res.json("some error occured while fetching student using user_id");
+  })
+});
+
+
 //
 router.post('/student_get_for_erp_id',authenticated(['ADMIN','LIBRARIAN','ACCOUNTANT']),function(req,res){
    if (!req.body.erp_id || !req.body.session){
@@ -35,7 +48,7 @@ router.post('/student_get_for_erp_id',authenticated(['ADMIN','LIBRARIAN','ACCOUN
 //authenticated['ADMIN','LIBRARIAN','ACCOUNTANT'],
 router.post('/students_get_for_class_ref',authenticated(['ADMIN','LIBRARIAN','ACCOUNTANT']),function(req,res){
   console.log(count++);
-	db.models.Student.find({class_ref:req.body.class_ref,session:req.body.session}).then((student)=>{
+	db.models.Student.find({class_ref:req.body.class_ref,session:req.body.session}).populate('dormitory transport').then((student)=>{
 		res.json(student);
 	}).catch((err)=>{
 		console.log('Some kind of error occured....')

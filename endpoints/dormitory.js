@@ -23,6 +23,25 @@ router.post('/dormitory_get_all',authenticated(['ADMIN']),function(req,res){
 	})
 })
 
+router.post('/dormitory_get_room',authenticated(['ADMIN']),function(req,res){
+	db.models.Dormitory.findOne({room_num:req.body.room_num}).then((dormitory)=>{
+		if(dormitory){
+
+			console.log(dormitory);
+			res.json(dormitory);
+		}
+
+		else{
+			res.json('No such dormitory exists');
+		}
+		
+	}).catch((err)=>{
+		console.log(err);
+		throw err = new Error('Some error occured while getting room_num of dormitory');
+	
+	})
+})
+
 
 router.post('/dormitory',authenticated(['ADMIN']),function(req,res){
 	db.models.Dormitory.findOne({name:req.body.name}).then((dormitory)=>{

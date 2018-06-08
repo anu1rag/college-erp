@@ -12,7 +12,7 @@ router.post('/calendar_get_one',authenticated(['ADMIN','LIBRARIAN','ACCOUNTANT',
 	})
 });
 
-router.post('/calendar_get_all',authenticated(['ADMIN','LIBRARIAN','ACCOUNTANT','TEACHER','OTHER']),function(req,res){
+router.post('/calendar_get_all',authenticated(['ADMIN','LIBRARIAN','ACCOUNTANT','TEACHER','OTHER','STUDENT']),function(req,res){
 	db.models.Calendar.find({session:req.body.session}).then((calendars)=>{
 		console.log(calendars);
 		res.json(calendars);

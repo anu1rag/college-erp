@@ -23,6 +23,25 @@ router.post('/transport_get_all',authenticated(['ADMIN']),function(req,res){
 	})
 })
 
+router.post('/transport_get_vehicle',authenticated(['ADMIN']),function(req,res){
+	db.models.Transport.findOne({vehicle_num:req.body.vehicle_num}).then((transport)=>{
+		if(transport){
+
+			console.log(transport);
+			res.json(transport);
+		}
+
+		else{
+			res.json('No such transport exists');
+		}
+		
+	}).catch((err)=>{
+		console.log(err);
+		throw err = new Error('Some error occured while getting vehicle_num of transport');
+	
+	})
+})
+
 
 router.post('/transport',authenticated(['ADMIN']),function(req,res){
 	db.models.Transport.findOne({name:req.body.name,session:req.body.session}).then((transport)=>{

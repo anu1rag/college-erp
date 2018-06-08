@@ -12,7 +12,7 @@ router.post('/accountant_get',authenticated(['ADMIN','ACCOUNTANT']),function(req
 	})
 });
 
-//maja aa rha hai naa saale
+
 
 router.post('/accountant_get_all',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
 	db.models.Accountant.find({session:req.body.session}).then((accountants)=>{
@@ -23,12 +23,22 @@ router.post('/accountant_get_all',authenticated(['ADMIN','ACCOUNTANT']),function
 	})
 });
 
+router.post('/accountant_get_for_user_id',authenticated(['ACCOUNTANT']),function(req,res){
+  
+  db.models.Accountant.findOne({user_id: req.body.user_id}).then((accountant)=>{
+    console.log(accountant);
+    res.json(accountant);
+  }).catch((err)=>{
+    console.log(err);
+    res.json("some error occured while fetching accountant using user_id");
+  })
+});
+
 
 router.post('/accountant',authenticated(['ADMIN']),function(req,res,next){
 
-
  db.models.User.findOne({username:req.body.username}).then((user)=>{
-  if(user){
+   if(user){
      db.models.Accountant.findOne({user_id:user._id}).then((accountant)=>{
       if(accountant){
     

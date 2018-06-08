@@ -30,7 +30,8 @@ module.exports.models = {
 	Attendance_Other: require('./data').Other_Attendance,
 	Twilio: require('./data').Twilio,
 	Nodemailer: require('./data').Nodemailer,
-	Count: require('./data').Count
+	Count: require('./data').Count,
+	Fees: require('./data').Fees
 
 }
 

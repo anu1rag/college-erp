@@ -28,10 +28,10 @@ router.post('/login',function(req,res){
              var verifiedUser =  bcrypt.compareSync(req.body.password, user.password);
              console.log(verifiedUser);
           	if(verifiedUser){
-               jwt.sign({ user },'thisissomekindofsecret',(err,token)=>{
+               jwt.sign({ user },'@5bjuitioh45t_#vkiyyilr$%_c',(err,token)=>{
                	 if (err) throw err = new Error('Token not generated correctly');
                	 else{
-               	 	res.json({access_token:token});
+               	 	res.json({access_token:token, user:user.type, _id:user._id});
                	 }
 
 

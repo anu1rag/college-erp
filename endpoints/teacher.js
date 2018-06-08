@@ -31,6 +31,16 @@ router.post('/teacher_get_all',authenticated(['ADMIN','ACCOUNTANT']),function(re
 	})
 });
 
+router.post('/teacher_get_for_user_id',authenticated(['TEACHER']),function(req,res){
+  
+  db.models.Teacher.findOne({user_id: req.body.user_id}).then((teacher)=>{
+    console.log(teacher);
+    res.json(teacher);
+  }).catch((err)=>{
+    console.log(err);
+    res.json("some error occured while fetching teacher using user_id");
+  })
+});
 
 router.post('/teacher',authenticated(['ADMIN','ACCOUNTANT']),function(req,res,next){
 
