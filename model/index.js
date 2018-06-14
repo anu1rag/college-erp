@@ -31,7 +31,11 @@ module.exports.models = {
 	Twilio: require('./data').Twilio,
 	Nodemailer: require('./data').Nodemailer,
 	Count: require('./data').Count,
-	Fees: require('./data').Fees
+	Fees: require('./data').Fees,
+	Payroll_Teacher: require('./data').Payroll_Teacher,
+	Payroll_Accountant: require('./data').Payroll_Accountant,
+	Payroll_Librarian: require('./data').Payroll_Librarian,
+	Payroll_Other: require('./data').Payroll_Other
 
 }
 

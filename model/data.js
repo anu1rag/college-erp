@@ -265,9 +265,6 @@ var fees = new Schema({
        	default: 'Unpaid',
        	enum: ['Paid', 'Unpaid']
        },
-
-       
-
     }],
 
     fees:{
@@ -1063,51 +1060,143 @@ var system = new Schema({
 
 });
 
-
-
-var payroll = new Schema({
+var payroll_teacher = new Schema({
 	
-	user_id: {
-		type: Schema.Types.ObjectId,
-		required: true,
-		ref: 'User'
-	},
-    
-	basic_sal: {
+	date:{
 		type: String,
 		required: true
 	},
 
-	allowances: {
-		type: Array
-		//Array of objects
-		//{ allowance_name, value }
-	},
+    staffs:[{
+    	staff: {
+    		type:Schema.Types.ObjectId,
+    		ref: 'Teacher'
+    	},
 
-	deductions: {
-		type: Array
-		//Array of objects
-		//{ deduction_name, value }
-	},
+       status: {
+       	type: String,
+       	required: true,
+       	default: 'Unpaid',
+       	enum: ['Paid', 'Unpaid','Cancelled']
+       },
+    }],
 
-	month: {
+    salary:{
+       	   type: Array,
+       	   required: true
+       },
+
+    session: {
+    	type: String,
+    	required: true
+    }
+
+})
+
+
+
+var payroll_accountant = new Schema({
+	
+	date:{
 		type: String,
 		required: true
 	},
 
-	status: {
-		type: String,
-		required: true,
-		enum: ['Paid', 'Pending', 'Cancelled']
-	},
+    staffs:[{
+    	staff: {
+    		type:Schema.Types.ObjectId,
+    		ref: 'Accountant'
+    	},
 
-	session: {
+       status: {
+       	type: String,
+       	required: true,
+       	default: 'Unpaid',
+       	enum: ['Paid', 'Unpaid','Cancelled']
+       },
+    }],
+
+    salary:{
+       	   type: Array,
+       	   required: true
+       },
+
+    session: {
+    	type: String,
+    	required: true
+    }
+
+})
+
+var payroll_librarian = new Schema({
+	
+	date:{
 		type: String,
 		required: true
-	}
+	},
+
+    staffs:[{
+    	staff: {
+    		type:Schema.Types.ObjectId,
+    		ref: 'Librarian'
+    	},
+
+       status: {
+       	type: String,
+       	required: true,
+       	default: 'Unpaid',
+       	enum: ['Paid', 'Unpaid','Cancelled']
+       },
+    }],
+
+    salary:{
+       	   type: Array,
+       	   required: true
+       },
+
+    session: {
+    	type: String,
+    	required: true
+    }
+
+})
+
+var payroll_other = new Schema({
+	
+	date:{
+		type: String,
+		required: true
+	},
+
+    staffs:[{
+    	staff: {
+    		type:Schema.Types.ObjectId,
+    		ref: 'OtherStaff'
+    	},
+
+       status: {
+       	type: String,
+       	required: true,
+       	default: 'Unpaid',
+       	enum: ['Paid', 'Unpaid','Cancelled']
+       },
+    }],
+
+    salary:{
+       	   type: Array,
+       	   required: true
+       },
+
+    session: {
+    	type: String,
+    	required: true
+    }
+
+})
 
 
-});
+
+
 
 
 var expense = new Schema({
@@ -1155,6 +1244,7 @@ var message = new Schema({
 
 
 var twilio = new Schema({
+	
 	account_sid: {
 		type: String,
 		required: true
@@ -1169,6 +1259,7 @@ var twilio = new Schema({
 		type: String,
 		required: true
 	}
+
 });
 
 var nodemailer = new Schema({
@@ -1222,7 +1313,10 @@ module.exports = {
 	Dormitory: mongoose.model('Dormitory',dormitory),
 	System: mongoose.model('System',system),
 	Notice: mongoose.model('Notice',notice),
-	Payroll: mongoose.model('Payroll',payroll),
+	Payroll_Teacher: mongoose.model('Payroll_Teacher',payroll_teacher),
+	Payroll_Accountant: mongoose.model('Payroll_Accountant',payroll_accountant),
+	Payroll_Librarian: mongoose.model('Payroll_Librarian',payroll_librarian),
+	Payroll_Other: mongoose.model('Payroll_Other',payroll_other),
 	Expense: mongoose.model('Expense',expense),
 	Message: mongoose.model('Message',message),
 	Marks: mongoose.model('Marks',marks),
