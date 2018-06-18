@@ -23,6 +23,27 @@ router.post('/get_fees_for_class_ref',authenticated(['ADMIN']),function(req,res)
 })
 
 
+router.post('/get_fees_for_student_ref',authenticated(['STUDENT']),function(req,res){
+	db.models.Fees.find({class_ref:req.body.class_ref,session:req.body.session}).populate('class_ref students.student').then((feesname)=>{
+		var feesvalue = [];
+		console.log(feesname);
+        for(var i=0;i<feesname.length;i++){
+        	for(var j=0;j<feesname[i]['students'].length;j++){
+        		if(feesname[i]['students'][j]['student']['_id'] == req.body.student_id){
+                   feesvalue.push({"_id":feesname[i]['_id'],"fees": feesname[i]['fees'],"date": feesname[i]['date'], "students":[{"student":feesname[i]['students'][j]['student'],"status":feesname[i]['students'][j]['status']}],"session":feesname[i]['session']})
+        		}
+        	}
+        }
+        console.log("student:",feesvalue);
+        res.json(feesvalue);
+
+	}).catch((err)=>{
+		console.log(err);
+		throw err = new Error('Some error occured while saving fees');
+	})
+})
+
+
 
 router.post('/fees_create',authenticated(['ADMIN']),function(req,res){
 	var feesnew = new db.models.Fees({

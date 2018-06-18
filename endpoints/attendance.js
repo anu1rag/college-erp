@@ -15,6 +15,7 @@ router.post('/attendance_student_class',authenticated(['ADMIN']),function(req,re
 
 
 router.post('/attendance_student_day',authenticated(['ADMIN','STUDENT']),function(req,res){
+	
 	db.models.Attendance_Student.find({class_ref:req.body.class_ref,session:req.body.session}).then((student_attendance)=>{
 	   let studentArray = [];
 	   let index = 0;
@@ -59,6 +60,7 @@ router.post('/attendance_student_day',authenticated(['ADMIN','STUDENT']),functio
 		console.log(err);
 		throw err = new Error('Some error occured');
 	})
+
 })
 
 
@@ -72,11 +74,53 @@ router.post('/attendance_student_get_for_class_ref',authenticated(['ADMIN']),fun
 	})
 })
 
-router.post('/attendance_teacher_day',authenticated(['ADMIN','TEACHER','ACCOUNTANT']),function(req,res){
-	db.models.Attendance_Accountant.findOne({erp_id: req.body.erp_id, session: req.body.session}).then((teacher_attendance)=>{
-		res.json(teacher_attendance);
-		console.log(teacher_attendance);
+router.post('/attendance_teacher_day',authenticated(['TEACHER']),function(req,res){
+	
+	db.models.Attendance_Teacher.find({session:req.body.session}).then((staff_attendance)=>{
+	   let staffArray = [];
+	   let index = 0;
+       let stlen = staff_attendance.length-1;
+       let stindex = staff_attendance[stlen]['staffs'].length;
+       for(let i = 0; i<stindex;i++){
+       	console.log(staff_attendance[stlen]['staffs'][i]['staff']);
+         if(req.body.staff_id === String(staff_attendance[stlen]['staffs'][i]['staff'])){
+           
+         	index = i;
+         	console.log("index is",index);
+         	break;
+
+         }
+       }
+       
+       for(let i=0;i<=stlen;i++){
+         if(index <= staff_attendance[i]['staffs'].length-1){
+            staffArray.push({date:staff_attendance[i]['date'],status:staff_attendance[i]['staffs'][index]['status']});
+            console.log(staffArray);
+         	//staffArray.push(staff_attendance[i]['staffs'][index])
+         }
+
+         else{
+
+         	staffArray.push({date:staff_attendance[i]['date'], status:'NA'});
+         	console.log(staffArray);
+         }
+       }
+        let sortingArray = staffArray.map((value)=>{
+           return JSON.stringify(value);
+        })
+
+        sortingArray.sort();
+        console.log(sortingArray);
+        let sortedArray = sortingArray.map((value)=>{
+        	return JSON.parse(value);
+        })
+        res.json(sortedArray);
+		console.log("staffArray",staffArray.sort());
+	}).catch((err)=>{
+		console.log(err);
+		throw err = new Error('Some error occured');
 	})
+
 })
 
 router.post('/attendance_teacher_all',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
@@ -89,14 +133,53 @@ router.post('/attendance_teacher_all',authenticated(['ADMIN','ACCOUNTANT']),func
 	})
 })
 
-router.post('/attendance_accountant_day',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
-	db.models.Attendance_Accountant.findOne({erp_id: req.body.erp_id, session: req.body.session}).then((accountant_attendance)=>{
-		res.json(accountant_attendance);
-		console.log(accountant_attendance);
+router.post('/attendance_accountant_day',authenticated(['ACCOUNTANT']),function(req,res){
+	
+	db.models.Attendance_Accountant.find({session:req.body.session}).then((staff_attendance)=>{
+	   let staffArray = [];
+	   let index = 0;
+       let stlen = staff_attendance.length-1;
+       let stindex = staff_attendance[stlen]['staffs'].length;
+       for(let i = 0; i<stindex;i++){
+       	console.log(staff_attendance[stlen]['staffs'][i]['staff']);
+         if(req.body.staff_id === String(staff_attendance[stlen]['staffs'][i]['staff'])){
+           
+         	index = i;
+         	console.log("index is",index);
+         	break;
+
+         }
+       }
+       
+       for(let i=0;i<=stlen;i++){
+         if(index <= staff_attendance[i]['staffs'].length-1){
+            staffArray.push({date:staff_attendance[i]['date'],status:staff_attendance[i]['staffs'][index]['status']});
+            console.log(staffArray);
+         	//staffArray.push(staff_attendance[i]['staffs'][index])
+         }
+
+         else{
+
+         	staffArray.push({date:staff_attendance[i]['date'], status:'NA'});
+         	console.log(staffArray);
+         }
+       }
+        let sortingArray = staffArray.map((value)=>{
+           return JSON.stringify(value);
+        })
+
+        sortingArray.sort();
+        console.log(sortingArray);
+        let sortedArray = sortingArray.map((value)=>{
+        	return JSON.parse(value);
+        })
+        res.json(sortedArray);
+		console.log("staffArray",staffArray.sort());
 	}).catch((err)=>{
 		console.log(err);
 		throw err = new Error('Some error occured');
 	})
+
 })
 
 router.post('/attendance_accountant_all',authenticated(['ADMIN']),function(req,res){
@@ -110,15 +193,55 @@ router.post('/attendance_accountant_all',authenticated(['ADMIN']),function(req,r
 })
 
 
-router.post('/attendance_librarian_day',authenticated(['ADMIN','LIBRARIAN']),function(req,res){
-	db.models.Attendance_Librarian.find({erp_id: req.body.erp_id, session: req.body.session}).then((librarian_attendance)=>{
-		res.json(librarian_attendance);
-		console.log(librarian_attendance);
+router.post('/attendance_librarian_day',authenticated(['LIBRARIAN']),function(req,res){
+	
+	db.models.Attendance_Librarian.find({session:req.body.session}).then((staff_attendance)=>{
+	   let staffArray = [];
+	   let index = 0;
+       let stlen = staff_attendance.length-1;
+       let stindex = staff_attendance[stlen]['staffs'].length;
+       for(let i = 0; i<stindex;i++){
+       	console.log(staff_attendance[stlen]['staffs'][i]['staff']);
+         if(req.body.staff_id === String(staff_attendance[stlen]['staffs'][i]['staff'])){
+           
+         	index = i;
+         	console.log("index is",index);
+         	break;
+
+         }
+       }
+       
+       for(let i=0;i<=stlen;i++){
+         if(index <= staff_attendance[i]['staffs'].length-1){
+            staffArray.push({date:staff_attendance[i]['date'],status:staff_attendance[i]['staffs'][index]['status']});
+            console.log(staffArray);
+         	//staffArray.push(staff_attendance[i]['staffs'][index])
+         }
+
+         else{
+
+         	staffArray.push({date:staff_attendance[i]['date'], status:'NA'});
+         	console.log(staffArray);
+         }
+       }
+        let sortingArray = staffArray.map((value)=>{
+           return JSON.stringify(value);
+        })
+
+        sortingArray.sort();
+        console.log(sortingArray);
+        let sortedArray = sortingArray.map((value)=>{
+        	return JSON.parse(value);
+        })
+        res.json(sortedArray);
+		console.log("staffArray",staffArray.sort());
 	}).catch((err)=>{
 		console.log(err);
 		throw err = new Error('Some error occured');
 	})
+
 })
+
 
 router.post('/attendance_librarian_all',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
 	db.models.Attendance_Librarian.find({date: req.body.date, session: req.body.session}).populate('staffs.staff', 'name erp_id phone').then((librarian_attendance)=>{
@@ -360,15 +483,55 @@ router.post('/attendance_other',authenticated(['ADMIN']),function(req,res){
 })
 
 
-router.post('/attendance_other_day',authenticated(['ADMIN','OTHER']),function(req,res){
-	db.models.Attendance_Other.find({erp_id: req.body.erp_id,session: req.body.session}).populate().then((other_attendance)=>{
-		res.json(other_attendance);
-		console.log(other_attendance);
+router.post('/attendance_other_day',authenticated(['OTHER']),function(req,res){
+	
+	db.models.Attendance_Other.find({session:req.body.session}).then((staff_attendance)=>{
+	   let staffArray = [];
+	   let index = 0;
+       let stlen = staff_attendance.length-1;
+       let stindex = staff_attendance[stlen]['staffs'].length;
+       for(let i = 0; i<stindex;i++){
+       	console.log(staff_attendance[stlen]['staffs'][i]['staff']);
+         if(req.body.staff_id === String(staff_attendance[stlen]['staffs'][i]['staff'])){
+           
+         	index = i;
+         	console.log("index is",index);
+         	break;
+
+         }
+       }
+       
+       for(let i=0;i<=stlen;i++){
+         if(index <= staff_attendance[i]['staffs'].length-1){
+            staffArray.push({date:staff_attendance[i]['date'],status:staff_attendance[i]['staffs'][index]['status']});
+            console.log(staffArray);
+         	//staffArray.push(staff_attendance[i]['staffs'][index])
+         }
+
+         else{
+
+         	staffArray.push({date:staff_attendance[i]['date'], status:'NA'});
+         	console.log(staffArray);
+         }
+       }
+        let sortingArray = staffArray.map((value)=>{
+           return JSON.stringify(value);
+        })
+
+        sortingArray.sort();
+        console.log(sortingArray);
+        let sortedArray = sortingArray.map((value)=>{
+        	return JSON.parse(value);
+        })
+        res.json(sortedArray);
+		console.log("staffArray",staffArray.sort());
 	}).catch((err)=>{
 		console.log(err);
 		throw err = new Error('Some error occured');
 	})
+
 })
+
 
 router.post('/attendance_other_all',authenticated(['ADMIN']),function(req,res){
 	db.models.Attendance_Other.find({date: req.body.date, session: req.body.session}).populate('staffs.staff', 'name erp_id phone').then((other_attendance)=>{

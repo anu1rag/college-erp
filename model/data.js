@@ -850,11 +850,18 @@ var marks = new Schema({
 		ref: 'Exam'
 	},
 
-	students:{
-		type: Array,
-		required:true
-		//{student_id,marks,grade}
-	},
+	students:[{
+		 student: {
+		  type: Schema.Types.ObjectId,
+		  required: true,
+		  ref: 'Student'
+		 },
+		 marks: {
+		  type:String,
+		  required: true
+		 }
+	   
+	}],
 
 	session: {
    	   type: String,
@@ -907,6 +914,19 @@ var routine = new Schema({
 });
 
 
+var expense_category = new Schema({
+	category: {
+		type: String,
+		required: true
+	},
+	session:{
+		type: String,
+		required: true
+	}
+});
+
+
+
 var book = new Schema({
 	isbn: {
    	   type: String,
@@ -947,6 +967,7 @@ var book = new Schema({
 
 });
 
+
 var transport = new Schema({
     name: {
    	   type: String,
@@ -968,6 +989,7 @@ var transport = new Schema({
    	   required: true
    }
 });
+
 
 var dormitory = new Schema({
     name: {
@@ -999,6 +1021,7 @@ var dormitory = new Schema({
 
 
 });
+
 
 
 var notice = new Schema({
@@ -1195,20 +1218,36 @@ var payroll_other = new Schema({
 })
 
 
-
-
-
-
 var expense = new Schema({
     
-    date: {
-    	type: String
+    category:{
+    	type: String,
+    	required:  true,
+    	ref: 'Expense_Category'
+
     },
 
-    expenses: {
-    	type: Array
-    	//{category,expense}
+    date: {
+    	type: String,
+    	required: true
+    },
+    
+    title: {
+       type: String,
+       required: true
+    },
+    
+    amount:{
+    	type: String,
+    	required: true
+    },
+
+    session:{
+    	type: String,
+    	required: true
     }
+
+   
 
 });
 
@@ -1262,6 +1301,7 @@ var twilio = new Schema({
 
 });
 
+
 var nodemailer = new Schema({
 	mail: {
 		type: String,
@@ -1283,6 +1323,7 @@ var nodemailer = new Schema({
 		required: true
 	}
 });
+
 
 
 user.pre('save', function(next){
@@ -1318,6 +1359,7 @@ module.exports = {
 	Payroll_Librarian: mongoose.model('Payroll_Librarian',payroll_librarian),
 	Payroll_Other: mongoose.model('Payroll_Other',payroll_other),
 	Expense: mongoose.model('Expense',expense),
+	Expense_Category: mongoose.model('Expense_Category',expense_category),
 	Message: mongoose.model('Message',message),
 	Marks: mongoose.model('Marks',marks),
 	Exam: mongoose.model('Exams',exam),
@@ -1330,5 +1372,6 @@ module.exports = {
 	Twilio : mongoose.model('Twilio',twilio),
 	Nodemailer: mongoose.model('Nodemailer',nodemailer),
 	Count: mongoose.model('Count', count),
-	Fees: mongoose.model('Fees', fees)
+	Fees: mongoose.model('Fees', fees),
+
 }

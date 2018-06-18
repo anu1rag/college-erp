@@ -22,7 +22,25 @@ router.post('/get_payroll_for_teacher_all',authenticated(['ADMIN']),function(req
 	})
 })
 
+router.post('/get_payroll_for_teacher_ref',authenticated(['TEACHER']),function(req,res){
+	db.models.Payroll_Teacher.find({session:req.body.session}).populate('staffs.staff').then((payrollname)=>{
+		var payrollvalue = [];
+		console.log(payrollname);
+        for(var i=0;i<payrollname.length;i++){
+        	for(var j=0;j<payrollname[i]['staffs'].length;j++){
+        		if(payrollname[i]['staffs'][j]['staff']['_id'] == req.body.staff_id){
+                   payrollvalue.push({"_id":payrollname[i]['_id'],"salary": payrollname[i]['salary'],"date": payrollname[i]['date'], "staffs":[{"staff":payrollname[i]['staffs'][j]['staff'],"status":payrollname[i]['staffs'][j]['status']}],"session":payrollname[i]['session']})
+        		}
+        	}
+        }
+        console.log("staff:",payrollvalue);
+        res.json(payrollvalue);
 
+	}).catch((err)=>{
+		console.log(err);
+		throw err = new Error('Some error occured while saving payroll');
+	})
+})
 
 router.post('/payroll_create_teacher',authenticated(['ADMIN']),function(req,res){
 	var payrollnew = new db.models.Payroll_Teacher({
@@ -120,6 +138,25 @@ router.post('/get_payroll_for_accountant_all',authenticated(['ADMIN']),function(
 	})
 })
 
+router.post('/get_payroll_for_accountant_ref',authenticated(['ACCOUNTANT']),function(req,res){
+	db.models.Payroll_Accountant.find({session:req.body.session}).populate('staffs.staff').then((payrollname)=>{
+		var payrollvalue = [];
+		console.log(payrollname);
+        for(var i=0;i<payrollname.length;i++){
+        	for(var j=0;j<payrollname[i]['staffs'].length;j++){
+        		if(payrollname[i]['staffs'][j]['staff']['_id'] == req.body.staff_id){
+                   payrollvalue.push({"_id":payrollname[i]['_id'],"payroll": payrollname[i]['payroll'],"date": payrollname[i]['date'], "staffs":[{"staff":payrollname[i]['staffs'][j]['staff'],"status":payrollname[i]['staffs'][j]['status']}],"session":payrollname[i]['session']})
+        		}
+        	}
+        }
+        console.log("staff:",payrollvalue);
+        res.json(payrollvalue);
+
+	}).catch((err)=>{
+		console.log(err);
+		throw err = new Error('Some error occured while saving payroll');
+	})
+})
 
 
 router.post('/payroll_create_accountant',authenticated(['ADMIN']),function(req,res){
@@ -218,7 +255,25 @@ router.post('/get_payroll_for_librarian_all',authenticated(['ADMIN']),function(r
 	})
 })
 
+router.post('/get_payroll_for_librarian_ref',authenticated(['LIBRARIAN']),function(req,res){
+	db.models.Payroll_Librarian.find({session:req.body.session}).populate('staffs.staff').then((payrollname)=>{
+		var payrollvalue = [];
+		console.log(payrollname);
+        for(var i=0;i<payrollname.length;i++){
+        	for(var j=0;j<payrollname[i]['staffs'].length;j++){
+        		if(payrollname[i]['staffs'][j]['staff']['_id'] == req.body.staff_id){
+                   payrollvalue.push({"_id":payrollname[i]['_id'],"payroll": payrollname[i]['payroll'],"date": payrollname[i]['date'], "staffs":[{"staff":payrollname[i]['staffs'][j]['staff'],"status":payrollname[i]['staffs'][j]['status']}],"session":payrollname[i]['session']})
+        		}
+        	}
+        }
+        console.log("staff:",payrollvalue);
+        res.json(payrollvalue);
 
+	}).catch((err)=>{
+		console.log(err);
+		throw err = new Error('Some error occured while saving payroll');
+	})
+})
 
 router.post('/payroll_create_librarian',authenticated(['ADMIN']),function(req,res){
 	var payrollnew = new db.models.Payroll_Librarian({
@@ -316,7 +371,25 @@ router.post('/get_payroll_for_other_all',authenticated(['ADMIN']),function(req,r
 	})
 })
 
+router.post('/get_payroll_for_other_ref',authenticated(['OTHER']),function(req,res){
+	db.models.Payroll_Other.find({session:req.body.session}).populate('staffs.staff').then((payrollname)=>{
+		var payrollvalue = [];
+		console.log(payrollname);
+        for(var i=0;i<payrollname.length;i++){
+        	for(var j=0;j<payrollname[i]['staffs'].length;j++){
+        		if(payrollname[i]['staffs'][j]['staff']['_id'] == req.body.staff_id){
+                   payrollvalue.push({"_id":payrollname[i]['_id'],"payroll": payrollname[i]['payroll'],"date": payrollname[i]['date'], "staffs":[{"staff":payrollname[i]['staffs'][j]['staff'],"status":payrollname[i]['staffs'][j]['status']}],"session":payrollname[i]['session']})
+        		}
+        	}
+        }
+        console.log("staff:",payrollvalue);
+        res.json(payrollvalue);
 
+	}).catch((err)=>{
+		console.log(err);
+		throw err = new Error('Some error occured while saving payroll');
+	})
+})
 
 router.post('/payroll_create_other',authenticated(['ADMIN']),function(req,res){
 	var payrollnew = new db.models.Payroll_Other({

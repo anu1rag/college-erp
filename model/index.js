@@ -19,6 +19,7 @@ module.exports.models = {
 	Notice: require('./data').Notice,
 	Payroll: require('./data').Payroll,
 	Expense: require('./data').Expense,
+	Expense_Category: require('./data').Expense_Category,
 	Message: require('./data').Message,
 	Marks: require('./data').Marks,
 	Exam: require('./data').Exam,

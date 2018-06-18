@@ -14,7 +14,7 @@ router.post('/student_get',authenticated(['ADMIN','LIBRARIAN','ACCOUNTANT']),fun
 
 router.post('/student_get_for_user_id',authenticated(['STUDENT']),function(req,res){
   
-  db.models.Student.findOne({user_id: req.body.user_id}).then((student)=>{
+  db.models.Student.findOne({user_id: req.body.user_id,session: req.body.session}).then((student)=>{
     console.log(student);
     res.json(student);
   }).catch((err)=>{

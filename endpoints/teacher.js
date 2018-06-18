@@ -33,7 +33,7 @@ router.post('/teacher_get_all',authenticated(['ADMIN','ACCOUNTANT']),function(re
 
 router.post('/teacher_get_for_user_id',authenticated(['TEACHER']),function(req,res){
   
-  db.models.Teacher.findOne({user_id: req.body.user_id}).then((teacher)=>{
+  db.models.Teacher.findOne({user_id:req.body.user_id,session:req.body.session}).then((teacher)=>{
     console.log(teacher);
     res.json(teacher);
   }).catch((err)=>{

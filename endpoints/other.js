@@ -23,7 +23,7 @@ router.post('/other_get_all',authenticated(['ADMIN']),function(req,res){
 
 router.post('/other_get_for_user_id',authenticated(['OTHER']),function(req,res){
   
-  db.models.OtherStaff.findOne({user_id: req.body.user_id}).then((other)=>{
+  db.models.OtherStaff.findOne({user_id: req.body.user_id,session: req.body.session}).then((other)=>{
     console.log(other);
     res.json(other);
   }).catch((err)=>{

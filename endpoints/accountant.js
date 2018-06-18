@@ -25,7 +25,7 @@ router.post('/accountant_get_all',authenticated(['ADMIN','ACCOUNTANT']),function
 
 router.post('/accountant_get_for_user_id',authenticated(['ACCOUNTANT']),function(req,res){
   
-  db.models.Accountant.findOne({user_id: req.body.user_id}).then((accountant)=>{
+  db.models.Accountant.findOne({user_id: req.body.user_id,session: req.body.session}).then((accountant)=>{
     console.log(accountant);
     res.json(accountant);
   }).catch((err)=>{
