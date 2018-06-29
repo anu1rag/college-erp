@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router(); 
 
-router.post('/book_get',authenticated(['LIBRARIAN']),function(req,res){
+router.post('/book_get',authenticated(['LIBRARIAN','ADMIN']),function(req,res){
 	
 	db.models.Book.findOne({_id: req.body._id}).then((book)=>{
 		console.log(book);
@@ -12,7 +12,8 @@ router.post('/book_get',authenticated(['LIBRARIAN']),function(req,res){
 	})
 });
 
-router.post('/book_get_all',authenticated(['LIBRARIAN']),function(req,res){
+
+router.post('/book_get_all',authenticated(['LIBRARIAN','ADMIN']),function(req,res){
 	db.models.Book.find({}).populate('assigned_to').then((books)=>{
 		console.log(books);
 		res.json(books);
@@ -21,10 +22,21 @@ router.post('/book_get_all',authenticated(['LIBRARIAN']),function(req,res){
 		throw err = new Error('Some error occured');
 	
 	})
-})
+});
+
+router.post('/book_get_for_student_ref',authenticated(['STUDENT']),function(req,res){
+	db.models.Book.find({assigned_to:req.body.student_id,assigned:true}).then((books)=>{
+		console.log(books);
+		res.json(books);
+	}).catch((err)=>{
+		console.log(err);
+		throw err = new Error('Some error occured');
+	
+	})
+});
 
 
-router.post('/book',authenticated(['LIBRARIAN']),function(req,res){
+router.post('/book',authenticated(['LIBRARIAN','ADMIN']),function(req,res){
 	db.models.Book.findOne({title:req.body.title,isbn:req.body.isbn}).then((book)=>{
 		if(!book){
 			var book = new db.models.Book({
@@ -34,7 +46,7 @@ router.post('/book',authenticated(['LIBRARIAN']),function(req,res){
             assigned_to: req.body.assigned_to,
             assigned_from: req.body.assigned_from,
             assigned_duration: req.body.assigned_duration,
-   		    session: req.body.session
+   		    
 
 	    });
 
@@ -57,7 +69,7 @@ router.post('/book',authenticated(['LIBRARIAN']),function(req,res){
 });
 
 
-router.post('/book_edit',authenticated(['LIBRARIAN']),function(req,res){
+router.post('/book_edit',authenticated(['LIBRARIAN','ADMIN']),function(req,res){
 	console.log(req.body);
 	db.models.Book.findOne({_id:req.body._id}).then((bookEdited)=>{
       if(bookEdited){
@@ -68,7 +80,7 @@ router.post('/book_edit',authenticated(['LIBRARIAN']),function(req,res){
 		bookEdited.assigned_to =  req.body.assigned_to;
 		bookEdited.assigned_from =  req.body.assigned_from;
 		bookEdited.assigned_duration = req.body.assigned_duration
-		bookEdited.session = req.body.session;
+	
  
     bookEdited.save().then((editedbook)=>{
     	res.json(editedbook);

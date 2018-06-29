@@ -4,22 +4,6 @@ var bcrypt = require('bcryptjs');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 
-router.post('/admin',function(req,res,next){
-  user = new db.models.User({
-  	username: 'anurag4142@gmail.com',
-  	password: 'thisisadminpass',
-  	type: 'ADMIN' 
-  });
-  user.save().then((user)=>{
-  	console.log(user);
-  	res.json(user);
-  }).catch((err)=>{
-  	 console.log(err);
-  	 throw err = new Error('Error while saving user');
-  })
-})
-
-
 
 router.post('/login',function(req,res){
 	db.models.User.findOne({username: req.body.username}).then((user)=>{

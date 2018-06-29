@@ -36,7 +36,7 @@ router.post('/class_create',authenticated(['ADMIN']),function(req,res){
 	var classnew = new db.models.NewClass({
       name: req.body.name,
       section: req.body.section,
-      session: req.body.session
+      
 	});
 
 	classnew.save().then((classnew)=>{
@@ -56,7 +56,7 @@ router.post('/class_edit',authenticated(['ADMIN']),function(req,res){
 			
 			classEdit.name = req.body.name;
 			classEdit.section =  req.body.section;
-			classEdit.session = req.body.session;
+
 
 		
        classEdit.save().then((newClassEdit)=>{

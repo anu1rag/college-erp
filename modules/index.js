@@ -1,6 +1,7 @@
 
 module.exports = {
 
-	cors : require('./cors'),
-	auth : require('./auth')
+	cors : require('./cors').cors,
+	auth : require('./auth'),
+	storage: require('./storage')
 }

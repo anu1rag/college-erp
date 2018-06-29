@@ -13,7 +13,7 @@ router.post('/transport_get',authenticated(['ADMIN']),function(req,res){
 });
 
 router.post('/transport_get_all',authenticated(['ADMIN']),function(req,res){
-	db.models.Transport.find({session:req.body.session}).then((vehicles)=>{
+	db.models.Transport.find({}).then((vehicles)=>{
 		console.log(vehicles);
 		res.json(vehicles);
 	}).catch((err)=>{
@@ -44,13 +44,13 @@ router.post('/transport_get_vehicle',authenticated(['ADMIN']),function(req,res){
 
 
 router.post('/transport',authenticated(['ADMIN']),function(req,res){
-	db.models.Transport.findOne({name:req.body.name,session:req.body.session}).then((transport)=>{
+	db.models.Transport.findOne({name:req.body.name}).then((transport)=>{
 		if(!transport){
 			var transport = new db.models.Transport({
             name: req.body.name,
             vehicle_num: req.body.vehicle_num,
             fare: req.body.fare,
-   		    session: req.body.session
+   		    
 
 	    });
 
@@ -80,7 +80,6 @@ router.post('/transport_edit',authenticated(['ADMIN']),function(req,res){
 		transportEdited.name =  req.body.name;
 		transportEdited.vehicle_num =  req.body.vehicle_num;
 		transportEdited.fare =  req.body.fare;
-		transportEdited.session = req.body.session;
  
     transportEdited.save().then((editedtransport)=>{
     	res.json(editedtransport);

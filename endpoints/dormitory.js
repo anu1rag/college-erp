@@ -51,7 +51,7 @@ router.post('/dormitory',authenticated(['ADMIN']),function(req,res){
             room_num: req.body.room_num,
             room_type: req.body.room_type,
             fare: req.body.fare,
-   		    session: req.body.session
+   		    
 
 	    });
 
@@ -82,7 +82,7 @@ router.post('/dormitory_edit',authenticated(['ADMIN']),function(req,res){
 		dormitoryEdited.room_num =  req.body.room_num;
 		dormitoryEdited.room_type = req.body.room_type;
 		dormitoryEdited.fare =  req.body.fare;
-		dormitoryEdited.session = req.body.session;
+		
  
     dormitoryEdited.save().then((editeddormitory)=>{
     	res.json(editeddormitory);

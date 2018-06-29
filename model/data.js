@@ -28,6 +28,102 @@ var user = new Schema({
 
 });
 
+var admin = new Schema({
+		
+	user_id: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'User'
+	},
+
+
+	admin_contact: {
+		type: String,
+		required:  true
+	},
+
+	alternate_contact: {
+		type: String
+	},
+
+	name: {
+		type: String,
+		required:  true
+	},
+
+	gender: {
+        type: String,
+        enum: ['Male','Female','Other'],
+        required: true
+	},
+
+	birthday: {
+		type: String,
+		required: true
+	},
+
+
+	address: {
+		type: String,
+		required: true
+	},
+
+	email: { 
+		type: String,
+		required: true
+	},
+
+	date_of_join: {
+		type: String,
+		required: true
+	},
+
+	aadhar_num: {
+		type: String
+	},
+
+	transport: {
+		type: Schema.Types.ObjectId,
+		ref: 'Transport'
+
+	},
+
+	dormitory: {
+		type: Schema.Types.ObjectId,
+		ref: 'Dormitory'
+	},
+
+	account_name: {
+		type: String
+	},
+
+	account_number: {
+		type:  Number
+	},
+
+	ifsc: {
+		type:  String
+	},
+
+	caste: {
+		type:  String,
+		required: true
+	},
+
+
+	status: {
+		type: Boolean,
+		required: true
+	},
+
+	image: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'Upload'
+	}
+});
+
+
 var teacher = new Schema({
 	
 	user_id: {
@@ -109,6 +205,17 @@ var teacher = new Schema({
 		required: true
 	},
 
+	status: {
+		type: Boolean,
+		required: true
+	},	
+
+	image: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'Upload'
+	},
+
     session: {
    	   type: String,
    	   required: true
@@ -131,13 +238,18 @@ var student = new Schema({
 		required: true
 	},
 
+	guardian:{
+		type: String,
+		required: true
+	},
+
 	admission_num: {
 		type: String,
 	},
 
 	student_contact: {
 		type: String,
-		required:  true
+	
 	},
 
 	parent_contact: {
@@ -211,6 +323,17 @@ var student = new Schema({
 	caste: {
 		type:  String,
 		required: true
+	},
+
+	status: {
+		type: Boolean,
+		required: true
+	},
+
+	image: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'Upload'
 	},
 
 	session: {
@@ -360,6 +483,17 @@ var otherstaff = new Schema({
 		required: true
 	},
 
+	status: {
+		type: Boolean,
+		required: true
+	},
+	
+	image: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'Upload'
+	},
+
 	session: {
    	   type: String,
    	   required: true
@@ -450,6 +584,17 @@ var librarian = new Schema({
 		required: true
 	},
 
+	status: {
+		type: Boolean,
+		required: true
+	},
+
+	image: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'Upload'
+	},
+
 	session: {
    	   type: String,
    	   required: true
@@ -536,8 +681,19 @@ var accountant = new Schema({
 		type:  String
 	},
 
+	image: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'Upload'
+	},
+
 	caste: {
 		type:  String,
+		required: true
+	},
+
+	status: {
+		type: Boolean,
 		required: true
 	},
 
@@ -560,12 +716,7 @@ var newclass = new Schema({
 		type: String,
 		default: 'A',
 		required: true
-	},
-
-	session: {
-   	   type: String,
-   	   required: true
-   }
+	}
 
 });
 
@@ -577,13 +728,7 @@ var subject =  new Schema({
 	name: {
 		type: String,
 		required:  true
-	},
-
-	session: {
-   	   type: String,
-   	   required: true
-   }
-
+	}
 });
 
 
@@ -813,8 +958,6 @@ var exam = new Schema({
     	type: Schema.Types.ObjectId,
     	ref: 'NewClass'
     },
-
-
 	subject_ref: {
 		type: Schema.Types.ObjectId,
 		required: true,
@@ -842,12 +985,34 @@ var exam = new Schema({
    }
 });
 
+var upload = new Schema({
+	filename: {
+		type: String,
+		required: true
+	},
+	path:{
+		type: String,
+		required: true
+	}
+});
+
 var marks = new Schema({
+
+	subject_ref: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'Subject'
+	},
+	class_ref: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'NewClass'
+	},
 
 	exam_ref: {
 		type: Schema.Types.ObjectId,
 		required: true,
-		ref: 'Exam'
+		ref: 'Exams'
 	},
 
 	students:[{
@@ -858,7 +1023,7 @@ var marks = new Schema({
 		 },
 		 marks: {
 		  type:String,
-		  required: true
+		  required: true,
 		 }
 	   
 	}],
@@ -959,12 +1124,6 @@ var book = new Schema({
     	//number of days
     },
 
-    session: {
-   	   type: String,
-   	   required: true
-   }
-
-
 });
 
 
@@ -984,10 +1143,6 @@ var transport = new Schema({
    	   required: true
    },
 
-    session: {
-   	   type: String,
-   	   required: true
-   }
 });
 
 
@@ -1012,11 +1167,6 @@ var dormitory = new Schema({
        default: 'Non AC',
        enum: ['AC','Non AC']
     },
-
-    session: {
-   	   type: String,
-   	   required: true
-   }
 
 
 
@@ -1217,6 +1367,17 @@ var payroll_other = new Schema({
 
 })
 
+var session = new Schema({
+	current_session:{
+      type: String,
+      required: true
+	},
+	
+	sessionArray:{
+		type:Array,
+		required: true
+	}
+})
 
 var expense = new Schema({
     
@@ -1251,6 +1412,7 @@ var expense = new Schema({
 
 });
 
+
 var message = new Schema({
 	
 	body: {
@@ -1273,7 +1435,7 @@ var message = new Schema({
 		required: true
 	},
 
-	current_session:{
+	session:{
 		type: String,
 		required: true
 	}
@@ -1281,26 +1443,12 @@ var message = new Schema({
 
 })
 
-
-var twilio = new Schema({
-	
-	account_sid: {
-		type: String,
-		required: true
-	},
-
-	auth_token: {
-		type: String,
-		required: true
-	},
-
-	contact: {
+var msg = new Schema({
+	auth_key: {
 		type: String,
 		required: true
 	}
-
-});
-
+})
 
 var nodemailer = new Schema({
 	mail: {
@@ -1326,6 +1474,7 @@ var nodemailer = new Schema({
 
 
 
+
 user.pre('save', function(next){
 		                                                                                                                               
     if(this.password) {                                                                                                                                                        
@@ -1335,12 +1484,14 @@ user.pre('save', function(next){
        next()
 
 }    
- });
+ 
+});
 
 
 module.exports = {
 
 	User: mongoose.model('User',user),
+	Admin: mongoose.model('Admin',admin),
 	Teacher: mongoose.model('Teacher',teacher),
 	Student: mongoose.model('Student',student),
 	Librarian: mongoose.model('Librarian',librarian),
@@ -1369,9 +1520,12 @@ module.exports = {
 	Accountant_Attendance: mongoose.model('Accountant_Attendance',accountant_attendance),
 	Librarian_Attendance: mongoose.model('Librarian_Attendance',librarian_attendance),
 	Other_Attendance: mongoose.model('Other_Attendance',other_attendance),
-	Twilio : mongoose.model('Twilio',twilio),
 	Nodemailer: mongoose.model('Nodemailer',nodemailer),
 	Count: mongoose.model('Count', count),
+	Upload: mongoose.model('Upload',upload),
+	Session: mongoose.model('Session',session),
 	Fees: mongoose.model('Fees', fees),
+	MSG: mongoose.model('MSG', msg),
 
 }
+

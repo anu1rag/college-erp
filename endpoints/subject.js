@@ -30,8 +30,8 @@ router.post('/subject',authenticated(['ADMIN']),function(req,res){
 	db.models.Subject.findOne({name:req.body.name}).then((subject)=>{
 		if(!subject){
 			var subject = new db.models.Subject({
-            name: req.body.name,
-		   session: req.body.session
+            name: req.body.name
+		   
 	    });
 
 	subject.save().then((newsubject)=>{
@@ -58,7 +58,7 @@ router.post('/subject_edit',authenticated(['ADMIN']),function(req,res){
       if(subjectEdited){
     
 		subjectEdited.name =  req.body.name;
-		subjectEdited.session = req.body.session;
+	
  
     subjectEdited.save().then((editedSubject)=>{
     	res.json(editedSubject);

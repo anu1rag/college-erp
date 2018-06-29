@@ -4,6 +4,7 @@ module.exports.models = {
 
 	User: require('./data').User,
 	Teacher: require('./data').Teacher,
+	Admin: require('./data').Admin,
 	Student: require('./data').Student,
 	Librarian: require('./data').Librarian,
 	Accountant: require('./data').Accountant,
@@ -36,8 +37,11 @@ module.exports.models = {
 	Payroll_Teacher: require('./data').Payroll_Teacher,
 	Payroll_Accountant: require('./data').Payroll_Accountant,
 	Payroll_Librarian: require('./data').Payroll_Librarian,
-	Payroll_Other: require('./data').Payroll_Other
-
+	Payroll_Other: require('./data').Payroll_Other,
+	Upload: require('./data').Upload,
+	Session: require('./data').Session,
+	Report_Session: require('./data').Report_Session,
+	MSG: require('./data').MSG
 }
 
 

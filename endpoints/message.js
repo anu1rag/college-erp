@@ -23,7 +23,8 @@ router.post('/message_get_all',authenticated(['ADMIN']),function(req,res){
     })
 });
 
-router.post('/message',authenticated(['ADMIN']),function(req,res){
+
+router.post('/message',authenticated(['ADMIN']),function(req,res){ 
 
 	var message = new db.models.Message({
     
@@ -31,7 +32,7 @@ router.post('/message',authenticated(['ADMIN']),function(req,res){
      to: req.body.to,
      date: req.body.date,
      time: req.body.time,
-		 current_session:req.body.session
+		 session:req.body.session
 
 	});
 

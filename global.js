@@ -26,7 +26,7 @@ global.db = require('./model');
 global._ = require('underscore');
 
 global.modules = require('./modules');
-
+global.upload = require('./modules').storage.upload;
 global.authenticated = modules.auth.authenticate;
 
 global.count = 3;
