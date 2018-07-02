@@ -44,7 +44,7 @@ router.post('/dormitory_get_room',authenticated(['ADMIN']),function(req,res){
 
 
 router.post('/dormitory',authenticated(['ADMIN']),function(req,res){
-	db.models.Dormitory.findOne({name:req.body.name}).then((dormitory)=>{
+	db.models.Dormitory.findOne({name:req.body.name,room_num:req.body.room_num,room_type: req.body.room_type,fare: req.body.fare}).then((dormitory)=>{
 		if(!dormitory){
 			var dormitory = new db.models.Dormitory({
             name: req.body.name,

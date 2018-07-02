@@ -79,14 +79,32 @@ router.post('/category',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
 
 
 router.post('/expense',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
-      expense = {
-      	date: req.body.date,
-      	category: req.body.category,
-      	title: req.body.title,
-      	amount: req.body.amount,
-      	session: req.body.session
-     }
-    var expense = new db.models.Expense(expense);
+      db.models.Expense.findOne({_id:req.body._id,session: req.body.session}).then((expense)=>{
+      	if(expense){
+      	   expense.date = req.body.date;
+      	   expense.category = req.body.category;
+      	   expense.title = req.body.title;
+      	   expense.amount = req.body.amount;
+           expense.save().then((savedExpense)=>{
+           	console.log(savedExpense);
+           	res.json(savedExpense);
+           }).catch((err)=>{
+           	console.log(err);
+           	throw err = new Error('Error while editing expenses');
+           })
+      	}
+
+      	else{
+
+	      expenseValue = {
+	      	date: req.body.date,
+	      	category: req.body.category,
+	      	title: req.body.title,
+	      	amount: req.body.amount,
+	      	session: req.body.session
+	     }
+
+    var expense = new db.models.Expense(expenseValue);
      expense.save().then((newexpense)=>{
      	res.json(newexpense);
      	console.log(newexpense);
@@ -94,6 +112,13 @@ router.post('/expense',authenticated(['ADMIN','ACCOUNTANT']),function(req,res){
     	console.log(err);
     	throw err = new Error('Saved new expense');
     })
+   }
+
+      }).catch((err)=>{
+           	console.log(err);
+           	throw err = new Error('Error while finding expenses');
+    })
+ 
 })
 
 module.exports = router;
